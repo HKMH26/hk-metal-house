@@ -4,14 +4,22 @@ import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
 import Section from "@/components/Section";
 import ProductCard from "@/components/ProductCard";
-import { productCategories } from "@/data/products";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Our Products - HK Metal House | Trusted Industrial Metal Supplier",
   description: "Explore our wide range of precision-engineered brass, stainless steel, and aluminum components.",
 };
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const supabase = await createClient();
+  
+  const { data: products } = await supabase
+    .from("products")
+    .select("*")
+    .eq("active", true)
+    .order("created_at", { ascending: false });
+
   return (
     <>
       <Header />
@@ -26,18 +34,24 @@ export default function ProductsPage() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {productCategories.map((cat, index) => (
-              <ProductCard 
-                key={cat.id}
-                title={cat.title}
-                description={cat.description}
-                image={`https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=600&h=400`}
-                slug={cat.slug}
-                index={index}
-              />
-            ))}
-          </div>
+          {products && products.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {products.map((product, index) => (
+                <ProductCard 
+                  key={product.id}
+                  title={product.name}
+                  description={product.short_description}
+                  image={product.primary_image || "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=600&h=400"}
+                  slug={product.slug}
+                  index={index}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20">
+              <p className="text-gray-500 text-lg">No products available at the moment. Please check back later.</p>
+            </div>
+          )}
         </Section>
 
         {/* Custom Sourcing CTA */}

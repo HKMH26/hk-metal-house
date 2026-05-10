@@ -22,14 +22,14 @@ export default function ProductCard({ title, description, image, slug, index }: 
       transition={{ delay: index * 0.1 }}
       className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 border border-gray-100"
     >
-      <div className="relative h-64 overflow-hidden">
+      <div className="relative h-64 overflow-hidden bg-white p-4">
         <Image
           src={image}
           alt={title}
           fill
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          className="object-contain transition-transform duration-700 group-hover:scale-110 p-4"
         />
-        <div className="absolute inset-0 bg-primary/20 group-hover:bg-primary/0 transition-colors duration-500" />
+        <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/0 transition-colors duration-500 pointer-events-none" />
       </div>
       
       <div className="p-8">

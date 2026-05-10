@@ -1,14 +1,26 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { ExternalLink } from "lucide-react";
 import { companyInfo } from "@/data/company";
 
 export default function GoogleMap() {
-  const encodedAddress = encodeURIComponent(companyInfo.contact.address);
-  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyB_REPLACE_WITH_YOUR_KEY&q=${encodedAddress}`;
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setSettings(data);
+      })
+      .catch(err => console.error("Error fetching settings:", err));
+  }, []);
+
+  const address = settings?.address || companyInfo.contact.address;
+  const customEmbedUrl = settings?.googleMapsUrl;
   
-  // Note: For a public website without a specific API key, we use the standard iframe embed URL
-  const publicEmbedUrl = `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
+  const encodedAddress = encodeURIComponent(address);
+  const publicEmbedUrl = customEmbedUrl || `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
   const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`;
 
   return (

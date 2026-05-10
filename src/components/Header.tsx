@@ -17,6 +17,7 @@ function cn(...inputs: ClassValue[]) {
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [settings, setSettings] = useState<any>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -24,8 +25,22 @@ export default function Header() {
       setScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
+    
+    // Fetch settings
+    fetch("/api/settings")
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setSettings(data);
+      })
+      .catch(err => console.error("Error fetching settings:", err));
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const contactPhone = settings?.phone || companyInfo.contact.phone;
+  const contactEmail = settings?.email || companyInfo.contact.email;
+  const workingHours = settings?.workingHours || companyInfo.contact.workingHours;
+  const companyName = settings?.companyName || "HK METAL HOUSE";
 
   return (
     <header className="fixed top-0 w-full z-50 transition-all duration-300">
@@ -33,14 +48,14 @@ export default function Header() {
       <div className="bg-primary text-white py-2 hidden md:block">
         <div className="container mx-auto px-4 flex justify-between items-center text-sm">
           <div className="flex gap-6">
-            <a href={`tel:${companyInfo.contact.phone}`} className="flex items-center gap-2 hover:text-accent transition-colors">
-              <Phone size={14} /> {companyInfo.contact.phone}
+            <a href={`tel:${contactPhone}`} className="flex items-center gap-2 hover:text-accent transition-colors">
+              <Phone size={14} /> {contactPhone}
             </a>
-            <a href={`mailto:${companyInfo.contact.email}`} className="flex items-center gap-2 hover:text-accent transition-colors">
-              <Mail size={14} /> {companyInfo.contact.email}
+            <a href={`mailto:${contactEmail}`} className="flex items-center gap-2 hover:text-accent transition-colors">
+              <Mail size={14} /> {contactEmail}
             </a>
           </div>
-          <div>{companyInfo.contact.workingHours}</div>
+          <div>{workingHours}</div>
         </div>
       </div>
 
@@ -60,7 +75,7 @@ export default function Header() {
               priority 
             />
             <span className="text-xl md:text-2xl font-bold text-primary tracking-tight hidden sm:block">
-              HK METAL HOUSE
+              {companyName}
             </span>
           </Link>
 

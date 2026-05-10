@@ -15,9 +15,11 @@ import {
   Instagram, 
   Twitter, 
   Linkedin,
-  Map
+  Map,
+  KeyRound
 } from "lucide-react";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
@@ -106,14 +108,22 @@ export default function SettingsPage() {
           <h1 className="text-3xl font-bold text-gray-800">Settings</h1>
           <p className="text-gray-500 mt-2">Manage your business information and site settings.</p>
         </div>
-        <button 
-          onClick={handleSave}
-          disabled={saving}
-          className="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-secondary transition-all flex items-center gap-2 shadow-lg shadow-primary/20 disabled:opacity-70"
-        >
-          {saving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
-          Save Changes
-        </button>
+        <div className="flex gap-4">
+          <Link 
+            href="/admin/change-password"
+            className="bg-white text-gray-700 px-6 py-3 rounded-lg font-bold border border-gray-200 hover:bg-gray-50 transition-all flex items-center gap-2 shadow-sm"
+          >
+            <KeyRound size={20} /> Change Password
+          </Link>
+          <button 
+            onClick={handleSave}
+            disabled={saving}
+            className="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-secondary transition-all flex items-center gap-2 shadow-lg shadow-primary/20 disabled:opacity-70"
+          >
+            {saving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
+            Save Changes
+          </button>
+        </div>
       </div>
 
       <form onSubmit={handleSave} className="space-y-8">

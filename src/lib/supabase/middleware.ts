@@ -28,18 +28,40 @@ export async function updateSession(request: NextRequest) {
   )
 
   // refreshing the auth token
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  let user = null;
+  try {
+    const {
+      data: { user: authUser },
+      error: authError
+    } = await supabase.auth.getUser()
+    
+    if (!authError) {
+      user = authUser;
+    }
+  } catch (error) {
+    console.error('Supabase middleware auth error:', error);
+  }
+
+  const isAuthPage = 
+    request.nextUrl.pathname.startsWith('/admin/login') ||
+    request.nextUrl.pathname.startsWith('/admin/forgot-password') ||
+    request.nextUrl.pathname.startsWith('/admin/reset-password');
 
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith('/admin/login') &&
+    !isAuthPage &&
     request.nextUrl.pathname.startsWith('/admin')
   ) {
-    // no user, potentially respond by redirecting the user to the login page
+    // no user, redirect to login
     const url = request.nextUrl.clone()
     url.pathname = '/admin/login'
+    return NextResponse.redirect(url)
+  }
+
+  // If user is logged in and tries to access auth pages, redirect to dashboard
+  if (user && isAuthPage) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/admin/dashboard'
     return NextResponse.redirect(url)
   }
 

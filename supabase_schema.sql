@@ -50,6 +50,24 @@ CREATE TABLE settings (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Create product_reviews table
+CREATE TABLE product_reviews (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  product_id UUID REFERENCES products(id) ON DELETE CASCADE,
+  customer_name TEXT NOT NULL,
+  company_name TEXT,
+  email TEXT,
+  rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+  review_title TEXT,
+  review_text TEXT NOT NULL,
+  approved BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create indexes for performance
+CREATE INDEX idx_product_reviews_product_id ON product_reviews(product_id);
+CREATE INDEX idx_product_reviews_approved ON product_reviews(approved);
+
 -- Create storage buckets
 -- Note: These need to be created via Supabase Dashboard or API, but here are the names:
 -- 1. product-images (Public)
@@ -60,15 +78,19 @@ ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE product_images ENABLE ROW LEVEL SECURITY;
 ALTER TABLE inquiries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE product_reviews ENABLE ROW LEVEL SECURITY;
 
 -- Policies for public access (Read-only for public)
 CREATE POLICY "Public products access" ON products FOR SELECT USING (active = true);
 CREATE POLICY "Public product_images access" ON product_images FOR SELECT USING (true);
 CREATE POLICY "Public settings access" ON settings FOR SELECT USING (true);
 CREATE POLICY "Public inquiries insert" ON inquiries FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public approved reviews access" ON product_reviews FOR SELECT USING (approved = true);
+CREATE POLICY "Public reviews insert" ON product_reviews FOR INSERT WITH CHECK (true);
 
 -- Policies for admin access (Full access for authenticated users)
 CREATE POLICY "Admin products full access" ON products FOR ALL TO authenticated USING (true);
 CREATE POLICY "Admin product_images full access" ON product_images FOR ALL TO authenticated USING (true);
 CREATE POLICY "Admin inquiries full access" ON inquiries FOR ALL TO authenticated USING (true);
 CREATE POLICY "Admin settings full access" ON settings FOR ALL TO authenticated USING (true);
+CREATE POLICY "Admin product_reviews full access" ON product_reviews FOR ALL TO authenticated USING (true);

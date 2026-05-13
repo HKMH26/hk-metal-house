@@ -10,7 +10,13 @@ import { FileText, ArrowRight, Search, Info, Settings, Phone } from "lucide-reac
 import Link from "next/link";
 import Image from "next/image";
 
-export async function generateMetadata({ searchParams }: { searchParams: { q?: string } }): Promise<Metadata> {
+interface PageProps {
+  searchParams: Promise<{
+    q?: string;
+  }>;
+}
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
   const { q } = await searchParams;
   if (q) {
     return {
@@ -33,7 +39,7 @@ const STATIC_PAGES = [
 
 export const revalidate = 0;
 
-export default async function SearchPage({ searchParams }: { searchParams: { q?: string } }) {
+export default async function SearchPage({ searchParams }: PageProps) {
   const { q = "" } = await searchParams;
   const supabase = await createClient();
 

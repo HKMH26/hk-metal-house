@@ -2,7 +2,13 @@ import ProductForm from "@/components/admin/ProductForm";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 
-export default async function EditProductPage({ params }: { params: { id: string } }) {
+interface PageProps {
+  params: Promise<{
+    id: string;
+  }>;
+}
+
+export default async function EditProductPage({ params }: PageProps) {
   const { id } = await params;
   const supabase = await createClient();
 

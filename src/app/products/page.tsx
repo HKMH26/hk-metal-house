@@ -7,7 +7,13 @@ import ProductCard from "@/components/ProductCard";
 import ProductSearch from "@/components/ProductSearch";
 import { createClient } from "@/lib/supabase/server";
 
-export async function generateMetadata({ searchParams }: { searchParams: { search?: string } }): Promise<Metadata> {
+interface PageProps {
+  searchParams: Promise<{
+    search?: string;
+  }>;
+}
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
   const { search } = await searchParams;
   if (search) {
     return {
@@ -23,7 +29,7 @@ export async function generateMetadata({ searchParams }: { searchParams: { searc
 
 export const revalidate = 0;
 
-export default async function ProductsPage({ searchParams }: { searchParams: { search?: string } }) {
+export default async function ProductsPage({ searchParams }: PageProps) {
   const { search } = await searchParams;
   const supabase = await createClient();
 

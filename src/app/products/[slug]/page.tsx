@@ -12,7 +12,13 @@ import ProductDetailActions from "@/components/ProductDetailActions";
 import { getSiteSettings } from "@/lib/getSiteSettings";
 import { CheckCircle2, ChevronRight, Package, ShieldCheck, Settings, Truck, ListChecks, Settings2, Star, Award, Clock, Zap } from "lucide-react";
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+interface PageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
   const supabase = await createClient();
   const { data: product } = await supabase
@@ -84,7 +90,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 export const revalidate = 3600;
 
-export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
+export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const supabase = await createClient();
   const settings = await getSiteSettings();

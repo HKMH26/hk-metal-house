@@ -4,23 +4,17 @@ import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
 import Section from "@/components/Section";
 import ProductCard from "@/components/ProductCard";
-import { createClient } from "@/lib/supabase/server";
+import { getProducts } from "@/lib/products";
 
 export const metadata: Metadata = {
   title: "Our Products - HK Metal House | Trusted Industrial Metal Supplier",
   description: "Explore our wide range of precision-engineered brass, stainless steel, and aluminum components.",
 };
 
-export const revalidate = 3600;
+export const revalidate = 0;
 
 export default async function ProductsPage() {
-  const supabase = await createClient();
-  
-  const { data: products } = await supabase
-    .from("products")
-    .select("*")
-    .eq("active", true)
-    .order("created_at", { ascending: false });
+  const products = await getProducts();
 
   return (
     <>

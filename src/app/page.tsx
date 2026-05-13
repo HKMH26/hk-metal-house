@@ -8,25 +8,17 @@ import ProductCard from "@/components/ProductCard";
 import ContactForm from "@/components/ContactForm";
 import GoogleMap from "@/components/GoogleMap";
 import { companyInfo, whyChooseUs } from "@/data/company";
-import { infrastructureItems } from "@/data/infrastructure";
 import { qualityStandards } from "@/data/quality";
 import { certifications } from "@/data/certifications";
-import { createClient } from "@/lib/supabase/server";
 import { getSiteSettings } from "@/lib/getSiteSettings";
+import { getProducts } from "@/lib/products";
 import { ShieldCheck, Settings, Users, Globe, ArrowRight, Award, Warehouse, Phone, Mail, MapPin } from "lucide-react";
 
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = 0;
 
 export default async function Home() {
-  const supabase = await createClient();
   const settings = await getSiteSettings();
-  
-  const { data: featuredProducts } = await supabase
-    .from("products")
-    .select("*")
-    .eq("active", true)
-    .eq("featured", true)
-    .limit(4);
+  const products = await getProducts({ limit: 8 });
 
   const iconMap: any = {
     ShieldCheck: <ShieldCheck className="text-primary" size={40} />,
@@ -88,16 +80,16 @@ export default async function Home() {
           </div>
         </Section>
 
-        {/* Featured Products */}
+        {/* Products Section */}
         <Section 
-          title="Featured Products" 
+          title="Our Products" 
           subtitle="Precision Components" 
           bg="gray"
           id="products"
         >
-          {featuredProducts && featuredProducts.length > 0 ? (
+          {products && products.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {featuredProducts.map((product, index) => (
+              {products.map((product, index) => (
                 <ProductCard 
                   key={product.id}
                   title={product.name}
@@ -134,22 +126,6 @@ export default async function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-primary mb-4">{item.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        {/* Infrastructure */}
-        <Section title="Our Infrastructure" subtitle="State of the Art Facilities" bg="gray" id="infrastructure">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            {infrastructureItems.map((item, index) => (
-              <div key={index} className="relative h-80 rounded-2xl overflow-hidden group shadow-lg">
-                <Image src={item.image} alt={item.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary to-transparent opacity-80" />
-                <div className="absolute bottom-0 left-0 p-8">
-                  <h3 className="text-2xl font-bold text-white mb-2">{item.title}</h3>
-                  <p className="text-gray-200 text-sm">{item.description}</p>
-                </div>
               </div>
             ))}
           </div>

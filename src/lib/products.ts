@@ -9,6 +9,10 @@ export interface Product {
   primary_image: string;
   active: boolean;
   featured: boolean;
+  price?: number | null;
+  price_unit?: string | null;
+  price_prefix?: string | null;
+  show_price?: boolean | null;
   created_at: string;
   // Add other fields as needed
 }

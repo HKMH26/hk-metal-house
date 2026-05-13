@@ -97,6 +97,10 @@ export default async function Home() {
                   image={product.primary_image || "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=400&h=300"}
                   slug={product.slug}
                   index={index}
+                  price={product.price}
+                  price_unit={product.price_unit}
+                  price_prefix={product.price_prefix}
+                  show_price={product.show_price}
                 />
               ))}
             </div>

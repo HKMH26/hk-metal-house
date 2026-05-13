@@ -11,9 +11,23 @@ interface ProductCardProps {
   image: string;
   slug: string;
   index: number;
+  price?: number | null;
+  price_unit?: string | null;
+  price_prefix?: string | null;
+  show_price?: boolean | null;
 }
 
-export default function ProductCard({ title, description, image, slug, index }: ProductCardProps) {
+export default function ProductCard({ 
+  title, 
+  description, 
+  image, 
+  slug, 
+  index,
+  price,
+  price_unit,
+  price_prefix,
+  show_price
+}: ProductCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -39,6 +53,17 @@ export default function ProductCard({ title, description, image, slug, index }: 
         <p className="text-gray-600 mb-6 line-clamp-2">
           {description}
         </p>
+
+        {show_price && price && (
+          <div className="mb-6 flex items-baseline gap-1.5">
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Starting from</span>
+            <span className="text-xl font-bold text-primary">
+              {price_prefix} {new Intl.NumberFormat('en-IN').format(price)}
+            </span>
+            <span className="text-xs font-medium text-gray-400">/ {price_unit}</span>
+          </div>
+        )}
+
         <Link 
           href={`/products/${slug}`}
           className="inline-flex items-center gap-2 font-bold text-primary group-hover:gap-3 transition-all"

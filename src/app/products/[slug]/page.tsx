@@ -177,6 +177,18 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                     {product.name}
                   </h1>
 
+                  {/* Pricing Display */}
+                  {product.show_price && product.price && (
+                    <div className="flex items-baseline gap-2 pt-1">
+                      <span className="text-3xl font-bold text-primary">
+                        {product.price_prefix} {new Intl.NumberFormat('en-IN').format(product.price)}
+                      </span>
+                      <span className="text-sm font-medium text-gray-500">
+                        / {product.price_unit}
+                      </span>
+                    </div>
+                  )}
+
                   {/* Compact Rating */}
                   <div className="flex items-center gap-3 py-1">
                     <div className="flex items-center gap-0.5">

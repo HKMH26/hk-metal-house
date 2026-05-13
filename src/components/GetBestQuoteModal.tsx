@@ -163,6 +163,18 @@ Please send me the best quotation and product details.`;
             <h2 className="text-2xl font-bold text-gray-800 leading-tight">{product.name}</h2>
           </div>
 
+          {product.show_price && product.price && (
+            <div className="mb-6 p-4 bg-primary/5 rounded-xl border border-primary/10">
+              <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Estimated Price</p>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-2xl font-bold text-primary">
+                  {product.price_prefix} {new Intl.NumberFormat('en-IN').format(product.price)}
+                </span>
+                <span className="text-xs font-medium text-gray-500">/ {product.price_unit}</span>
+              </div>
+            </div>
+          )}
+
           <div className="relative aspect-square w-full rounded-xl overflow-hidden mb-6 bg-white border border-gray-100 shadow-sm">
             <Image 
               src={product.primary_image || "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=600"} 

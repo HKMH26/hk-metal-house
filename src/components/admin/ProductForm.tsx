@@ -40,6 +40,12 @@ export default function ProductForm({ initialData, isEditing = false }: ProductF
   const [featured, setFeatured] = useState(initialData?.featured || false);
   const [active, setActive] = useState(initialData?.active ?? true);
   
+  // Pricing State
+  const [price, setPrice] = useState(initialData?.price || "");
+  const [priceUnit, setPriceUnit] = useState(initialData?.price_unit || "Piece");
+  const [pricePrefix, setPricePrefix] = useState(initialData?.price_prefix || "₹");
+  const [showPrice, setShowPrice] = useState(initialData?.show_price ?? true);
+  
   // Dynamic Arrays
   const [specifications, setSpecifications] = useState<Specification[]>(
     initialData?.specifications || [{ key: "", value: "" }]
@@ -138,6 +144,10 @@ export default function ProductForm({ initialData, isEditing = false }: ProductF
       primary_image: primaryImage,
       featured,
       active,
+      price: price ? parseFloat(price) : null,
+      price_unit: priceUnit,
+      price_prefix: pricePrefix,
+      show_price: showPrice,
       meta_title: metaTitle,
       meta_description: metaDescription,
       updated_at: new Date().toISOString(),
@@ -282,6 +292,53 @@ export default function ProductForm({ initialData, isEditing = false }: ProductF
                   className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none"
                   placeholder="Detailed product information..."
                 />
+              </div>
+            </div>
+          </section>
+
+          <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+            <h3 className="text-xl font-bold text-gray-800 border-b pb-4">Pricing Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-gray-700">Product Price</label>
+                <input 
+                  type="number" 
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none"
+                  placeholder="e.g. 1500"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-gray-700">Currency Symbol</label>
+                <input 
+                  type="text" 
+                  value={pricePrefix}
+                  onChange={(e) => setPricePrefix(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none"
+                  placeholder="₹"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-gray-700">Price Unit</label>
+                <input 
+                  type="text" 
+                  value={priceUnit}
+                  onChange={(e) => setPriceUnit(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none"
+                  placeholder="e.g. Piece"
+                />
+              </div>
+              <div className="flex items-end pb-3">
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input 
+                    type="checkbox" 
+                    checked={showPrice} 
+                    onChange={(e) => setShowPrice(e.target.checked)} 
+                    className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" 
+                  />
+                  <span className="text-sm font-bold text-gray-700 group-hover:text-primary transition-colors">Display Price</span>
+                </label>
               </div>
             </div>
           </section>

@@ -1,19 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Phone, Mail, MapPin, Facebook, Linkedin, Twitter, Instagram } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 import { navigationLinks } from "@/data/navigation";
-import { companyInfo } from "@/data/company";
+import { getSiteSettings } from "@/lib/getSiteSettings";
 import { createClient } from "@/lib/supabase/server";
+import SocialLinks from "./SocialLinks";
 
 export default async function Footer() {
+  const settings = await getSiteSettings();
   const supabase = await createClient();
-  const { data: settingsData } = await supabase
-    .from("settings")
-    .select("value")
-    .eq("key", "business_info")
-    .single();
-
-  const settings = settingsData?.value || {};
+  
+  // Use products table for quick links
   const { data: products } = await supabase
     .from("products")
     .select("name, slug")
@@ -34,32 +31,15 @@ export default async function Footer() {
               className="h-[80px] md:h-[100px] w-auto object-contain"
             />
           </div>
-          <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">{settings.companyName || companyInfo.name}</h3>
+          <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">{settings.companyName}</h3>
           <p className="text-gray-300 mb-6 leading-relaxed">
-            {companyInfo.description}
+            Leading trader, stockist, and supplier of high-quality metal components and industrial products. Sourced from a network of trusted manufacturers, we ensure that every product meets rigorous quality standards.
           </p>
-          <div className="flex gap-4">
-            {settings.socialLinks?.facebook && (
-              <a href={settings.socialLinks.facebook} target="_blank" className="bg-white/10 p-2 rounded-full hover:bg-accent hover:text-primary transition-all">
-                <Facebook size={20} />
-              </a>
-            )}
-            {settings.socialLinks?.linkedin && (
-              <a href={settings.socialLinks.linkedin} target="_blank" className="bg-white/10 p-2 rounded-full hover:bg-accent hover:text-primary transition-all">
-                <Linkedin size={20} />
-              </a>
-            )}
-            {settings.socialLinks?.instagram && (
-              <a href={settings.socialLinks.instagram} target="_blank" className="bg-white/10 p-2 rounded-full hover:bg-accent hover:text-primary transition-all">
-                <Instagram size={20} />
-              </a>
-            )}
-            {settings.socialLinks?.twitter && (
-              <a href={settings.socialLinks.twitter} target="_blank" className="bg-white/10 p-2 rounded-full hover:bg-accent hover:text-primary transition-all">
-                <Twitter size={20} />
-              </a>
-            )}
-          </div>
+          <SocialLinks 
+            settings={settings} 
+            className="gap-5" 
+            iconClassName="bg-white/10 p-2.5 rounded-full hover:bg-accent hover:text-primary" 
+          />
         </div>
 
         {/* Quick Links */}
@@ -98,24 +78,30 @@ export default async function Footer() {
         <div>
           <h4 className="text-xl font-bold mb-6 border-b-2 border-accent w-fit pb-1">Contact Us</h4>
           <ul className="space-y-4">
-            <li className="flex gap-3 text-gray-300">
-              <MapPin className="text-accent shrink-0" size={20} />
-              <span>{settings.address || companyInfo.contact.address}</span>
+            <li className="flex gap-4 items-start group">
+              <div className="bg-white/10 p-2 rounded-lg text-accent group-hover:bg-accent group-hover:text-primary transition-all">
+                <MapPin size={18} />
+              </div>
+              <span className="text-gray-300 group-hover:text-white transition-colors">{settings.address}</span>
             </li>
-            <li className="flex gap-3 text-gray-300">
-              <Phone className="text-accent shrink-0" size={20} />
-              <a href={`tel:${settings.phone || companyInfo.contact.phone}`} className="hover:text-white transition-colors">{settings.phone || companyInfo.contact.phone}</a>
+            <li className="flex gap-4 items-center group">
+              <div className="bg-white/10 p-2 rounded-lg text-accent group-hover:bg-accent group-hover:text-primary transition-all">
+                <Phone size={18} />
+              </div>
+              <a href={`tel:${settings.phone}`} className="text-gray-300 group-hover:text-white transition-colors">{settings.phone}</a>
             </li>
-            <li className="flex gap-3 text-gray-300">
-              <Mail className="text-accent shrink-0" size={20} />
-              <a href={`mailto:${settings.email || companyInfo.contact.email}`} className="hover:text-white transition-colors">{settings.email || companyInfo.contact.email}</a>
+            <li className="flex gap-4 items-center group">
+              <div className="bg-white/10 p-2 rounded-lg text-accent group-hover:bg-accent group-hover:text-primary transition-all">
+                <Mail size={18} />
+              </div>
+              <a href={`mailto:${settings.email}`} className="text-gray-300 group-hover:text-white transition-colors">{settings.email}</a>
             </li>
           </ul>
         </div>
       </div>
-
+      
       <div className="container mx-auto px-4 mt-16 pt-8 border-t border-white/10 text-center text-gray-400 text-sm">
-        <p>&copy; {new Date().getFullYear()} {settings.companyName || companyInfo.name}. All Rights Reserved.</p>
+        <p>© {new Date().getFullYear()} {settings.companyName}. All Rights Reserved.</p>
       </div>
     </footer>
   );

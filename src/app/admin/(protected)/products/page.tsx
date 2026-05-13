@@ -53,6 +53,9 @@ export default function ProductsListPage() {
     } else {
       toast.success("Product deleted successfully");
       setProducts(products.filter(p => p.id !== id));
+      // Revalidate product pages after deletion
+      fetch("/api/revalidate?path=/products").catch(console.error);
+      fetch("/api/revalidate?path=/").catch(console.error);
     }
   };
 
@@ -90,6 +93,8 @@ export default function ProductsListPage() {
     } else {
       setProducts(products.map(p => p.id === id ? { ...p, featured: !current } : p));
       toast.success(current ? "Removed from featured" : "Marked as featured");
+      // Revalidate homepage since featured products changed
+      fetch("/api/revalidate?path=/").catch(console.error);
     }
   };
 

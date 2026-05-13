@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   description: "Learn about HK Metal House's journey as a leading industrial metal supplier and strategic sourcing partner.",
 };
 
+export const revalidate = 3600;
+
 export default function AboutPage() {
   return (
     <>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Send, CheckCircle, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -20,8 +20,24 @@ export default function ContactForm({ productName }: ContactFormProps) {
     quantity: "",
     message: ""
   });
+  const [inquiryEmail, setInquiryEmail] = useState("");
   
   const supabase = createClient();
+
+  useEffect(() => {
+    const fetchInquiryEmail = async () => {
+      const { data } = await supabase
+        .from("settings")
+        .select("value")
+        .eq("key", "business_info")
+        .single();
+      
+      if (data?.value?.inquiryEmail) {
+        setInquiryEmail(data.value.inquiryEmail);
+      }
+    };
+    fetchInquiryEmail();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +53,9 @@ export default function ContactForm({ productName }: ContactFormProps) {
         quantity: formData.quantity,
         product_name: productName || "General Inquiry",
         message: formData.message,
-        status: "New"
+        status: "New",
+        // We could store the target email if needed, or use it for an edge function trigger
+        metadata: { target_email: inquiryEmail }
       });
 
     if (error) {

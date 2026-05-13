@@ -8,6 +8,8 @@ import ContactForm from "@/components/ContactForm";
 import ProductGallery from "@/components/ProductGallery";
 import ProductCard from "@/components/ProductCard";
 import ReviewsSection from "@/components/ReviewsSection";
+import ProductDetailActions from "@/components/ProductDetailActions";
+import { getSiteSettings } from "@/lib/getSiteSettings";
 import { CheckCircle2, ChevronRight, Package, ShieldCheck, Truck, ListChecks, Settings2, Star, Award, Clock, Zap } from "lucide-react";
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
@@ -80,9 +82,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
+export const revalidate = 3600;
+
 export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
   const { slug } = await params;
   const supabase = await createClient();
+  const settings = await getSiteSettings();
 
   // Fetch current product
   const { data: product, error } = await supabase
@@ -190,14 +195,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                   </div>
                 </div>
 
-                <div className="pt-4">
-                  <a 
-                    href="#quote-form" 
-                    className="inline-block w-full sm:w-auto bg-blue-900 text-white px-10 py-5 rounded-xl font-bold text-lg hover:bg-blue-800 transition-all shadow-xl shadow-blue-900/20 hover:scale-105 active:scale-95 text-center"
-                  >
-                    Request a Quote
-                  </a>
-                </div>
+                <ProductDetailActions product={product} companyName={settings.companyName} />
 
                 {/* Technical Specifications */}
                 {product.specifications && product.specifications.length > 0 && (

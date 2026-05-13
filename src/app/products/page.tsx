@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   description: "Explore our wide range of precision-engineered brass, stainless steel, and aluminum components.",
 };
 
+export const revalidate = 3600;
+
 export default async function ProductsPage() {
   const supabase = await createClient();
   

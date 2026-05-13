@@ -187,6 +187,12 @@ export default function ProductForm({ initialData, isEditing = false }: ProductF
     }
 
     toast.success(isEditing ? "Product updated successfully!" : "Product created successfully!");
+    
+    // Trigger revalidation for product pages
+    fetch("/api/revalidate?path=/products").catch(console.error);
+    fetch(`/api/revalidate?path=/products/${slug}`).catch(console.error);
+    fetch("/api/revalidate?path=/").catch(console.error);
+
     router.push("/admin/products");
     router.refresh();
   };

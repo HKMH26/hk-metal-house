@@ -9,6 +9,8 @@ import { companyInfo } from "@/data/company";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Image from "next/image";
+import { createClient } from "@/lib/supabase/client";
+import SocialLinks from "./SocialLinks";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -19,6 +21,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [settings, setSettings] = useState<any>(null);
   const pathname = usePathname();
+  const supabase = createClient();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,13 +29,20 @@ export default function Header() {
     };
     window.addEventListener("scroll", handleScroll);
     
-    // Fetch settings
-    fetch("/api/settings")
-      .then(res => res.json())
-      .then(data => {
-        if (!data.error) setSettings(data);
-      })
-      .catch(err => console.error("Error fetching settings:", err));
+    // Fetch settings directly from Supabase for real-time updates
+    const fetchSettings = async () => {
+      const { data } = await supabase
+        .from("settings")
+        .select("value")
+        .eq("key", "business_info")
+        .single();
+      
+      if (data) {
+        setSettings(data.value);
+      }
+    };
+
+    fetchSettings();
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -55,7 +65,16 @@ export default function Header() {
               <Mail size={14} /> {contactEmail}
             </a>
           </div>
-          <div>{workingHours}</div>
+          <div className="flex items-center gap-6">
+            <span>{workingHours}</span>
+            {settings && (
+              <SocialLinks 
+                settings={settings} 
+                iconClassName="hover:text-accent" 
+                className="border-l border-white/20 pl-6 hidden lg:flex" 
+              />
+            )}
+          </div>
         </div>
       </div>
 

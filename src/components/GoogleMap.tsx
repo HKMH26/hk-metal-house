@@ -2,26 +2,50 @@
 
 import { useState, useEffect } from "react";
 import { ExternalLink } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 import { companyInfo } from "@/data/company";
 
 export default function GoogleMap() {
   const [settings, setSettings] = useState<any>(null);
+  const supabase = createClient();
 
   useEffect(() => {
-    fetch("/api/settings")
-      .then(res => res.json())
-      .then(data => {
-        if (!data.error) setSettings(data);
-      })
-      .catch(err => console.error("Error fetching settings:", err));
+    const fetchSettings = async () => {
+      const { data } = await supabase
+        .from("settings")
+        .select("value")
+        .eq("key", "business_info")
+        .single();
+      
+      if (data) {
+        setSettings(data.value);
+      }
+    };
+
+    fetchSettings();
   }, []);
 
   const address = settings?.address || companyInfo.contact.address;
   const customEmbedUrl = settings?.googleMapsUrl;
+  const customDirectionUrl = settings?.googleMapsDirectionUrl;
   
   const encodedAddress = encodeURIComponent(address);
-  const publicEmbedUrl = customEmbedUrl || `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
-  const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`;
+  
+  // Use custom URL if provided, otherwise fallback to a generic embed URL based on the address
+  let publicEmbedUrl = customEmbedUrl;
+  
+  if (!publicEmbedUrl) {
+    publicEmbedUrl = `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
+  } else if (publicEmbedUrl.includes("google.com/maps") && !publicEmbedUrl.includes("output=embed") && !publicEmbedUrl.includes("embed")) {
+    // If the user provided a normal Google Maps link, try to convert it to an embed link
+    if (publicEmbedUrl.includes("?q=")) {
+      publicEmbedUrl = publicEmbedUrl.replace("/maps?", "/maps/embed?").includes("output=embed") ? publicEmbedUrl : `${publicEmbedUrl}&output=embed`;
+    } else {
+      publicEmbedUrl = `${publicEmbedUrl}${publicEmbedUrl.includes("?") ? "&" : "?"}output=embed`;
+    }
+  }
+
+  const directionsUrl = customDirectionUrl || `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`;
 
   return (
     <div className="w-full space-y-4">

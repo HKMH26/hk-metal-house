@@ -12,10 +12,14 @@ import { infrastructureItems } from "@/data/infrastructure";
 import { qualityStandards } from "@/data/quality";
 import { certifications } from "@/data/certifications";
 import { createClient } from "@/lib/supabase/server";
-import { ShieldCheck, Settings, Users, Globe, ArrowRight, Award, Warehouse, Microscope, Phone, Mail } from "lucide-react";
+import { getSiteSettings } from "@/lib/getSiteSettings";
+import { ShieldCheck, Settings, Users, Globe, ArrowRight, Award, Warehouse, Phone, Mail, MapPin } from "lucide-react";
+
+export const revalidate = 3600; // Revalidate every hour
 
 export default async function Home() {
   const supabase = await createClient();
+  const settings = await getSiteSettings();
   
   const { data: featuredProducts } = await supabase
     .from("products")
@@ -189,21 +193,21 @@ export default async function Home() {
                     <Phone className="text-accent shrink-0" />
                     <div>
                       <p className="text-sm text-gray-300 mb-1">Call Us</p>
-                      <p className="font-bold text-lg">{companyInfo.phone}</p>
+                      <p className="font-bold text-lg">{settings.phone}</p>
                     </div>
                   </div>
                   <div className="flex gap-4">
                     <Mail className="text-accent shrink-0" />
                     <div>
                       <p className="text-sm text-gray-300 mb-1">Email Us</p>
-                      <p className="font-bold text-lg">{companyInfo.email}</p>
+                      <p className="font-bold text-lg">{settings.email}</p>
                     </div>
                   </div>
                   <div className="flex gap-4">
                     <MapPin className="text-accent shrink-0" />
                     <div>
                       <p className="text-sm text-gray-300 mb-1">Our Office</p>
-                      <p className="font-bold text-lg">{companyInfo.address}</p>
+                      <p className="font-bold text-lg">{settings.address}</p>
                     </div>
                   </div>
                 </div>
@@ -219,6 +223,3 @@ export default async function Home() {
     </>
   );
 }
-
-// Add missing MapPin import
-import { MapPin } from "lucide-react";

@@ -87,16 +87,16 @@ export default function Header() {
         scrolled ? "bg-white shadow-md py-1" : "bg-white/90 backdrop-blur-md py-2"
       )}>
         <div className="container mx-auto px-4 flex justify-between items-center min-h-[80px] md:min-h-[110px]">
-          <Link href="/" className="flex items-center gap-4">
+          <Link href="/" className="flex items-center gap-3 md:gap-4">
             <Image 
               src="/images/hk-metal-house-logo.png" 
               alt="HK Metal House" 
               width={450} 
               height={230} 
-              className="h-[65px] md:h-[85px] w-auto object-contain" 
+              className="h-[50px] sm:h-[65px] md:h-[85px] w-auto object-contain transition-all" 
               priority 
             />
-            <span className="text-xl md:text-2xl font-bold text-primary tracking-tight hidden sm:block">
+            <span className="text-lg md:text-2xl font-bold text-[#0B3D91] tracking-tight hidden sm:block">
               {companyName}
             </span>
           </Link>
@@ -109,8 +109,8 @@ export default function Header() {
                   <Link
                     href={link.href}
                     className={cn(
-                      "font-medium transition-colors hover:text-primary",
-                      pathname === link.href ? "text-primary border-b-2 border-primary" : "text-secondary"
+                      "font-medium transition-colors hover:text-[#0B3D91]",
+                      pathname === link.href ? "text-[#0B3D91] border-b-2 border-[#0B3D91]" : "text-secondary"
                     )}
                   >
                     {link.name}
@@ -123,21 +123,21 @@ export default function Header() {
           </div>
 
           {/* Mobile Toggle & Search */}
-          <div className="lg:hidden flex items-center gap-4">
+          <div className="lg:hidden flex items-center gap-2 sm:gap-4">
             <button
-              className="text-secondary hover:text-primary transition-colors"
+              className="text-secondary hover:text-[#0B3D91] transition-colors p-2"
               onClick={() => setIsSearchOpen(true)}
               aria-label="Open search"
             >
-              <Search size={24} />
+              <Search size={22} />
             </button>
             <button
-              className="text-secondary hover:text-primary transition-colors"
+              className="text-secondary hover:text-[#0B3D91] transition-colors p-2"
               onClick={() => setIsOpen((prev) => !prev)}
               aria-expanded={isOpen}
               aria-label="Toggle menu"
             >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>

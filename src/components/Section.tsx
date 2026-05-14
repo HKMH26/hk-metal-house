@@ -22,20 +22,20 @@ export default function Section({ children, title, subtitle, className, bg = "wh
   const bgColors = {
     white: "bg-white",
     gray: "bg-gray-50",
-    dark: "bg-primary text-white",
+    dark: "bg-[#0B3D91] text-white",
   };
 
   return (
-    <section id={id} className={cn("py-20 md:py-32 overflow-hidden", bgColors[bg], className)}>
-      <div className="container mx-auto px-4">
+    <section id={id} className={cn("py-12 md:py-20 overflow-hidden", bgColors[bg], className)}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {(title || subtitle) && (
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 md:mb-16">
             {subtitle && (
               <motion.span 
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-primary font-bold tracking-widest uppercase text-sm mb-4 block"
+                className="text-[#0B3D91] font-bold tracking-widest uppercase text-xs sm:text-sm mb-3 md:mb-4 block"
               >
                 {subtitle}
               </motion.span>
@@ -45,16 +45,16 @@ export default function Section({ children, title, subtitle, className, bg = "wh
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-3xl md:text-4xl lg:text-5xl font-bold"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold"
               >
                 {title}
               </motion.h2>
             )}
             <motion.div 
               initial={{ width: 0 }}
-              whileInView={{ width: 80 }}
+              whileInView={{ width: 60 }}
               viewport={{ once: true }}
-              className="h-1.5 bg-primary mx-auto mt-6"
+              className="h-1 bg-[#D4AF37] mx-auto mt-4 md:mt-6"
             />
           </div>
         )}

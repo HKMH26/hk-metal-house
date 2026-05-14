@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { usePathname } from "next/navigation";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -19,10 +20,25 @@ interface SectionProps {
 }
 
 export default function Section({ children, title, subtitle, className, bg = "white", id }: SectionProps) {
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
+
   const bgColors = {
     white: "bg-white",
     gray: "bg-gray-50",
     dark: "bg-[#0B3D91] text-white",
+  };
+
+  const titleColors = {
+    white: "text-[#0B3D91]",
+    gray: "text-[#0B3D91]",
+    dark: "text-white",
+  };
+
+  const subtitleColors = {
+    white: isHomePage ? "text-[#0B3D91]" : "text-[#B45309]", // Amber-700 for accessible contrast on white for internal pages
+    gray: isHomePage ? "text-[#0B3D91]" : "text-[#B45309]",
+    dark: "text-[#FACC15]", // Vibrant yellow on dark background
   };
 
   return (
@@ -35,7 +51,10 @@ export default function Section({ children, title, subtitle, className, bg = "wh
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-[#0B3D91] font-bold tracking-widest uppercase text-xs sm:text-sm mb-3 md:mb-4 block"
+                className={cn(
+                  "font-bold tracking-widest uppercase text-xs sm:text-sm mb-3 md:mb-4 block",
+                  subtitleColors[bg]
+                )}
               >
                 {subtitle}
               </motion.span>
@@ -45,7 +64,10 @@ export default function Section({ children, title, subtitle, className, bg = "wh
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold"
+                className={cn(
+                  "text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold",
+                  titleColors[bg]
+                )}
               >
                 {title}
               </motion.h2>

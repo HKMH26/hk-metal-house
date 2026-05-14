@@ -21,7 +21,7 @@ export default function PageHeader({ title, subtitle }: PageHeaderProps) {
           className="max-w-3xl"
         >
           {subtitle && (
-            <span className="text-[#D4AF37] font-bold tracking-[0.2em] uppercase text-xs sm:text-sm mb-4 block">
+            <span className="text-[#FACC15] font-bold tracking-[0.2em] uppercase text-xs sm:text-sm mb-4 block drop-shadow-sm">
               {subtitle}
             </span>
           )}

@@ -156,69 +156,69 @@ export default function SettingsPage() {
                 type="text" 
                 value={settings.companyName || ""}
                 onChange={(e) => handleChange("companyName", e.target.value)}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary text-gray-900 font-medium placeholder:text-gray-400"
               />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-bold text-gray-700">Contact Email</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                 <input 
                   type="email" 
                   value={settings.email || ""}
                   onChange={(e) => handleChange("email", e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary text-gray-900 font-medium placeholder:text-gray-400"
                 />
               </div>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-bold text-gray-700">Phone Number</label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                 <input 
                   type="text" 
                   value={settings.phone || ""}
                   onChange={(e) => handleChange("phone", e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary text-gray-900 font-medium placeholder:text-gray-400"
                 />
               </div>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-bold text-gray-700">Working Hours</label>
               <div className="relative">
-                <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                 <input 
                   type="text" 
                   value={settings.workingHours || ""}
                   onChange={(e) => handleChange("workingHours", e.target.value)}
                   placeholder="e.g. Mon - Sat: 9:00 AM - 7:00 PM"
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary text-gray-900 font-medium placeholder:text-gray-400"
                 />
               </div>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-bold text-gray-700">Inquiry Email</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                 <input 
                   type="email" 
                   value={settings.inquiryEmail || ""}
                   onChange={(e) => handleChange("inquiryEmail", e.target.value)}
                   placeholder="Email for customer inquiries"
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary text-gray-900 font-medium placeholder:text-gray-400"
                 />
               </div>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-bold text-gray-700">WhatsApp Number</label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                 <input 
                   type="text" 
                   value={settings.whatsappNumber || ""}
                   onChange={(e) => handleChange("whatsappNumber", e.target.value)}
                   placeholder="e.g. 917847461623 (with country code, no +)"
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary text-gray-900 font-medium placeholder:text-gray-400"
                 />
               </div>
               <p className="text-xs text-gray-500">Used for "Get Best Quote" WhatsApp redirection.</p>
@@ -227,19 +227,19 @@ export default function SettingsPage() {
           <div className="space-y-2">
             <label className="text-sm font-bold text-gray-700">Office Address</label>
             <div className="relative">
-              <MapPin className="absolute left-3 top-3 text-gray-400" size={18} />
+              <MapPin className="absolute left-3 top-3 text-gray-500" size={18} />
               <textarea 
                 rows={3}
                 value={settings.address || ""}
                 onChange={(e) => handleChange("address", e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary text-gray-900 font-medium placeholder:text-gray-400"
               />
             </div>
           </div>
         </section>
 
         {/* Location & Maps */}
-        <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+        <section className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
           <div className="flex items-center gap-3 border-b pb-4">
             <Map className="text-primary" size={24} />
             <h2 className="text-xl font-bold text-gray-800">Map & Location</h2>
@@ -252,7 +252,7 @@ export default function SettingsPage() {
                 value={settings.googleMapsUrl || ""}
                 onChange={(e) => handleChange("googleMapsUrl", e.target.value)}
                 placeholder="https://www.google.com/maps/embed?pb=..."
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary text-gray-900 font-medium placeholder:text-gray-400"
               />
               <p className="text-xs text-gray-500">Paste the 'src' attribute from the Google Maps iframe embed code.</p>
             </div>
@@ -263,7 +263,7 @@ export default function SettingsPage() {
                 value={settings.googleMapsDirectionUrl || ""}
                 onChange={(e) => handleChange("googleMapsDirectionUrl", e.target.value)}
                 placeholder="https://www.google.com/maps/place/..."
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary text-gray-900 font-medium placeholder:text-gray-400"
               />
               <p className="text-xs text-gray-500">The link users click to get directions (normal map link).</p>
             </div>
@@ -271,7 +271,7 @@ export default function SettingsPage() {
         </section>
 
         {/* Social Media */}
-        <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+        <section className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
           <div className="flex items-center gap-3 border-b pb-4">
             <Globe className="text-primary" size={24} />
             <h2 className="text-xl font-bold text-gray-800">Social Media Links</h2>
@@ -286,7 +286,7 @@ export default function SettingsPage() {
                 value={settings.socialLinks?.facebook || ""}
                 onChange={(e) => handleSocialChange("facebook", e.target.value)}
                 placeholder="https://www.facebook.com/hkmetalhouse"
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary text-gray-900 font-medium placeholder:text-gray-400"
               />
             </div>
             <div className="space-y-2">
@@ -298,7 +298,7 @@ export default function SettingsPage() {
                 value={settings.socialLinks?.instagram || ""}
                 onChange={(e) => handleSocialChange("instagram", e.target.value)}
                 placeholder="https://www.instagram.com/hkmetalhouse"
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary text-gray-900 font-medium placeholder:text-gray-400"
               />
             </div>
             <div className="space-y-2">
@@ -310,7 +310,7 @@ export default function SettingsPage() {
                 value={settings.socialLinks?.twitter || ""}
                 onChange={(e) => handleSocialChange("twitter", e.target.value)}
                 placeholder="https://x.com/hkmetalhouse"
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary text-gray-900 font-medium placeholder:text-gray-400"
               />
             </div>
             <div className="space-y-2">
@@ -322,7 +322,7 @@ export default function SettingsPage() {
                 value={settings.socialLinks?.linkedin || ""}
                 onChange={(e) => handleSocialChange("linkedin", e.target.value)}
                 placeholder="https://www.linkedin.com/company/hkmetalhouse"
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary text-gray-900 font-medium placeholder:text-gray-400"
               />
             </div>
           </div>

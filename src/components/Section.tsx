@@ -36,8 +36,8 @@ export default function Section({ children, title, subtitle, className, bg = "wh
   };
 
   const subtitleColors = {
-    white: isHomePage ? "text-[#0B3D91]" : "text-[#B45309]", // Amber-700 for accessible contrast on white for internal pages
-    gray: isHomePage ? "text-[#0B3D91]" : "text-[#B45309]",
+    white: isHomePage ? "text-[#D4AF37]" : "text-[#B45309]", // Gold on Home Page, Amber-700 on internal
+    gray: isHomePage ? "text-[#D4AF37]" : "text-[#B45309]",
     dark: "text-[#FACC15]", // Vibrant yellow on dark background
   };
 

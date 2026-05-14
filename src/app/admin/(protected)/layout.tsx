@@ -20,7 +20,7 @@ export default async function ProtectedLayout({
     <div className="flex min-h-screen bg-[#F6F9FC]">
       <SessionManager />
       <Sidebar />
-      <main className="flex-1 ml-80 p-8 bg-gradient-to-br from-[#F8FBFF] via-[#F6F9FC] to-[#EEF4FF] min-h-screen">
+      <main className="flex-1 lg:ml-80 p-4 sm:p-8 bg-gradient-to-br from-[#F8FBFF] via-[#F6F9FC] to-[#EEF4FF] min-h-screen">
         <Toaster position="top-right" />
         {children}
       </main>

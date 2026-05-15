@@ -86,19 +86,37 @@ export default function Header() {
         "transition-all duration-300",
         scrolled ? "bg-white shadow-md py-1" : "bg-white/90 backdrop-blur-md py-2"
       )}>
-        <div className="container mx-auto px-4 flex justify-between items-center min-h-[80px] md:min-h-[110px]">
-          <Link href="/" className="flex items-center gap-3 md:gap-4">
+        <div className="container mx-auto px-4 flex items-center justify-between min-h-[65px] md:min-h-[110px]">
+          {/* Mobile Hamburger - Left */}
+          <div className="lg:hidden w-12 flex justify-start">
+            <button
+              className="text-gray-700 hover:text-[#0B3D91] transition-colors p-2"
+              onClick={() => setIsOpen((prev) => !prev)}
+              aria-expanded={isOpen}
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X size={26} /> : <Menu size={26} />}
+            </button>
+          </div>
+
+          {/* Logo & Company Name - Center-Left on mobile, Left on desktop */}
+          <Link href="/" className="flex items-center gap-3 md:gap-4 flex-1 justify-start lg:justify-start overflow-hidden">
             <Image 
               src="/images/hk-metal-house-logo.png" 
               alt="HK Metal House" 
               width={450} 
               height={230} 
-              className="h-[50px] sm:h-[65px] md:h-[85px] w-auto object-contain transition-all" 
+              className="h-[40px] sm:h-[50px] md:h-[85px] w-auto object-contain transition-all" 
               priority 
             />
-            <span className="text-lg md:text-2xl font-bold text-[#0B3D91] tracking-tight hidden sm:block">
-              {companyName}
-            </span>
+            <div className="flex flex-col">
+              <span className="text-base sm:text-lg md:text-2xl font-bold text-[#0B3D91] tracking-tight whitespace-nowrap">
+                {companyName}
+              </span>
+              <span className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-widest hidden xs:block">
+                Industrial Metal Supplier
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Nav */}
@@ -122,22 +140,14 @@ export default function Header() {
             <GlobalSearch className="w-72" />
           </div>
 
-          {/* Mobile Toggle & Search */}
-          <div className="lg:hidden flex items-center gap-2 sm:gap-4">
+          {/* Mobile Search - Right */}
+          <div className="lg:hidden w-12 flex justify-end">
             <button
-              className="text-secondary hover:text-[#0B3D91] transition-colors p-2"
+              className="text-gray-700 hover:text-[#0B3D91] transition-colors p-2"
               onClick={() => setIsSearchOpen(true)}
               aria-label="Open search"
             >
-              <Search size={22} />
-            </button>
-            <button
-              className="text-secondary hover:text-[#0B3D91] transition-colors p-2"
-              onClick={() => setIsOpen((prev) => !prev)}
-              aria-expanded={isOpen}
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              <Search size={24} />
             </button>
           </div>
         </div>

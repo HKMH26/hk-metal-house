@@ -14,6 +14,8 @@ export const metadata: Metadata = {
   },
 };
 
+import MobileBottomNav from "@/components/MobileBottomNav";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,7 +29,7 @@ export default function RootLayout({
     "logo": "https://www.hkmetalhouse.com/images/hk-metal-house-logo.png",
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+91-98765-43210",
+      "telephone": "+91-83206-62353",
       "contactType": "customer service"
     }
   };
@@ -40,8 +42,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} pb-20 lg:pb-0`}>
         {children}
+        <MobileBottomNav />
       </body>
     </html>
   );

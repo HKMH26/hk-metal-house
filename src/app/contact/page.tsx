@@ -37,44 +37,44 @@ export default async function ContactPage() {
               
               <div className="space-y-10">
                 <div className="flex gap-6 items-start">
-                  <div className="bg-primary text-white p-4 rounded-xl shadow-lg">
+                  <div className="bg-[#0B3D91] text-white p-4 rounded-xl shadow-lg">
                     <MapPin size={24} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold mb-2">Our Location</h4>
-                    <p className="text-gray-600 leading-relaxed">
+                    <h4 className="text-xl font-bold mb-2 text-[#D4AF37]">Our Location</h4>
+                    <p className="text-gray-900 leading-relaxed font-medium">
                       {settings.address}
                     </p>
                   </div>
                 </div>
                 
                 <div className="flex gap-6 items-start">
-                  <div className="bg-primary text-white p-4 rounded-xl shadow-lg">
+                  <div className="bg-[#0B3D91] text-white p-4 rounded-xl shadow-lg">
                     <Phone size={24} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold mb-2">Phone Numbers</h4>
-                    <p className="text-gray-600">{settings.phone}</p>
+                    <h4 className="text-xl font-bold mb-2 text-[#D4AF37]">Phone Numbers</h4>
+                    <p className="text-gray-900 font-medium">{settings.phone}</p>
                   </div>
                 </div>
                 
                 <div className="flex gap-6 items-start">
-                  <div className="bg-primary text-white p-4 rounded-xl shadow-lg">
+                  <div className="bg-[#0B3D91] text-white p-4 rounded-xl shadow-lg">
                     <Mail size={24} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold mb-2">Email Addresses</h4>
-                    <p className="text-gray-600">{settings.email}</p>
+                    <h4 className="text-xl font-bold mb-2 text-[#D4AF37]">Email Addresses</h4>
+                    <p className="text-gray-900 font-medium">{settings.email}</p>
                   </div>
                 </div>
                 
                 <div className="flex gap-6 items-start">
-                  <div className="bg-primary text-white p-4 rounded-xl shadow-lg">
+                  <div className="bg-[#0B3D91] text-white p-4 rounded-xl shadow-lg">
                     <Clock size={24} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold mb-2">Business Hours</h4>
-                    <p className="text-gray-600">{settings.workingHours}</p>
+                    <h4 className="text-xl font-bold mb-2 text-[#D4AF37]">Business Hours</h4>
+                    <p className="text-gray-900 font-medium">{settings.workingHours}</p>
                   </div>
                 </div>
               </div>

@@ -49,25 +49,25 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8">
-      <div className="flex items-center gap-4">
-        <div className="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 text-blue-900">
-          <KeyRound size={28} />
+    <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8 px-2 sm:px-0 py-4 sm:py-0">
+      <div className="flex items-center gap-4 px-2 sm:px-0">
+        <div className="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 text-[#0B3D91] shrink-0">
+          <KeyRound size={24} className="sm:w-7 sm:h-7" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-gray-800 tracking-tight">Change Password</h1>
-          <p className="text-gray-500 font-medium">Update your administrative account security.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">Change Password</h1>
+          <p className="text-sm sm:text-base text-gray-500 font-medium mt-0.5">Update your administrative account security.</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-[2rem] shadow-xl border border-[#E5EAF2] overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-900 to-blue-700 p-8 text-white">
-          <h2 className="text-xl font-bold">Security Settings</h2>
-          <p className="text-blue-100/80 text-sm mt-1 font-medium">Manage your login credentials below.</p>
+      <div className="bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-50 overflow-hidden">
+        <div className="bg-gradient-to-r from-[#0B3D91] to-[#082D5F] p-6 sm:p-8 text-white">
+          <h2 className="text-lg sm:text-xl font-bold">Security Settings</h2>
+          <p className="text-blue-100/80 text-xs sm:text-sm mt-1 font-medium">Manage your login credentials below.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8 md:p-12 space-y-8">
-          <div className="grid grid-cols-1 gap-8">
+        <form onSubmit={handleSubmit} className="p-5 sm:p-10 space-y-6 sm:space-y-8">
+          <div className="grid grid-cols-1 gap-6 sm:gap-8">
             <PasswordInput
               label="New Password"
               value={password}
@@ -98,11 +98,11 @@ export default function ChangePasswordPage() {
             </div>
           </div>
 
-          <div className="pt-4 flex justify-end">
+          <div className="pt-2 sm:pt-4 flex justify-end">
             <button
               type="submit"
               disabled={loading}
-              className="bg-blue-900 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-blue-800 transition-all flex items-center justify-center gap-3 disabled:opacity-70 shadow-xl shadow-blue-900/20 active:scale-95"
+              className="w-full sm:w-auto bg-[#0B3D91] text-white px-8 sm:px-10 py-4 auto rounded-2xl font-bold text-base sm:text-lg hover:bg-[#0A3A7A] transition-all flex items-center justify-center gap-3 disabled:opacity-70 shadow-[0_8px_20px_rgba(11,61,145,0.2)] active:scale-95"
             >
               {loading ? <Loader2 className="animate-spin" size={24} /> : (
                 <>

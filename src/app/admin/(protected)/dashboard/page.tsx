@@ -78,18 +78,18 @@ export default async function DashboardPage() {
       </header>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {stats.map((stat, i) => (
           <div 
             key={i} 
-            className="bg-white p-6 rounded-[2.5rem] shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-50 flex items-center gap-6 hover:translate-y-[-4px] transition-all duration-300"
+            className="bg-white p-4 sm:p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-50 flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:translate-y-[-4px] transition-all duration-300"
           >
-            <div className={`p-4 rounded-3xl bg-gradient-to-br ${stat.color} text-white shadow-lg`}>
-              <stat.icon size={24} />
+            <div className={`p-4 rounded-2xl bg-gradient-to-br ${stat.color} text-white shadow-lg shrink-0`}>
+              <stat.icon size={24} className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">{stat.name}</p>
-              <p className="text-3xl font-black text-gray-900">{stat.value}</p>
+              <p className="text-[9px] sm:text-[10px] font-black text-[#64748B] uppercase tracking-[0.1em] sm:tracking-[0.2em] mb-1">{stat.name}</p>
+              <p className="text-2xl sm:text-3xl font-black text-[#0F172A]">{stat.value}</p>
             </div>
           </div>
         ))}

@@ -7,12 +7,11 @@ import {
   ArrowLeft, 
   Save, 
   Upload, 
-  X, 
-  Plus, 
   Trash2, 
-  Image as ImageIcon,
   Loader2,
-  Check
+  Check,
+  ChevronDown,
+  PlusCircle
 } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -181,8 +180,6 @@ export default function ProductForm({ initialData, isEditing = false }: ProductF
       productId = data.id;
     }
 
-    // Update images in product_images table
-    // For simplicity, we'll delete and re-insert for editing, or just insert for new
     if (isEditing) {
       await supabase.from("product_images").delete().eq("product_id", productId);
     }
@@ -198,7 +195,6 @@ export default function ProductForm({ initialData, isEditing = false }: ProductF
 
     toast.success(isEditing ? "Product updated successfully!" : "Product created successfully!");
     
-    // Trigger revalidation for product pages
     fetch("/api/revalidate?path=/products").catch(console.error);
     fetch(`/api/revalidate?path=/products/${slug}`).catch(console.error);
     fetch("/api/revalidate?path=/").catch(console.error);
@@ -208,287 +204,318 @@ export default function ProductForm({ initialData, isEditing = false }: ProductF
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <Link href="/admin/products" className="bg-white p-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all text-gray-500">
-            <ArrowLeft size={20} />
+    <div className="max-w-5xl mx-auto space-y-6 sm:space-y-8">
+      {/* Header */}
+      <div className="flex flex-col mb-6">
+        <div className="flex items-start gap-4">
+          <Link href="/admin/products" className="bg-white p-3 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-all text-[#0F172A] shadow-sm flex-shrink-0 mt-0.5">
+            <ArrowLeft size={24} />
           </Link>
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800">{isEditing ? "Edit Product" : "Add New Product"}</h1>
-            <p className="text-gray-500">{isEditing ? "Update existing product details." : "Fill in the details to create a new catalog item."}</p>
+          <div className="flex-1">
+            <h1 className="text-[28px] font-bold text-[#0F172A] leading-tight">{isEditing ? "Edit Product" : "Add Product"}</h1>
+            <p className="text-[15px] text-[#64748B] mt-1 mb-6">{isEditing ? "Update existing product details." : "Fill in the details to create a new item."}</p>
+            
+            <button 
+              onClick={handleSubmit}
+              disabled={loading}
+              className="w-full sm:w-auto h-[52px] bg-gradient-to-r from-[#0B3D91] to-[#082D5F] text-white px-8 rounded-[16px] font-bold text-[16px] flex items-center justify-center gap-3 disabled:opacity-70 shadow-lg active:scale-95 transition-all"
+            >
+              {loading ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
+              {isEditing ? "Update Product" : "Save Product"}
+            </button>
           </div>
         </div>
-        <button 
-          onClick={handleSubmit}
-          disabled={loading}
-          className="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-secondary transition-all flex items-center gap-2 disabled:opacity-70 shadow-lg shadow-primary/20"
-        >
-          {loading ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
-          {isEditing ? "Update Product" : "Save Product"}
-        </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         {/* Left Column - Main Info */}
-        <div className="lg:col-span-2 space-y-8">
-          <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-            <h3 className="text-xl font-bold text-gray-800 border-b pb-4">Basic Information</h3>
-            <div className="space-y-4">
+        <div className="lg:col-span-2 space-y-6">
+          
+          {/* Accordion: Basic Information */}
+          <details open className="bg-white rounded-[20px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-[#E2E8F0] group overflow-hidden">
+            <summary className="p-5 md:p-6 cursor-pointer list-none flex justify-between items-center bg-white hover:bg-[#F8FAFC] transition-colors select-none font-bold text-[#0F172A] text-lg lg:text-xl">
+              Basic Information
+              <ChevronDown size={24} className="group-open:rotate-180 transition-transform text-[#64748B]" />
+            </summary>
+            <div className="p-5 md:p-6 border-t border-[#E2E8F0] space-y-6 bg-white">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700">Product Name</label>
+                <label className="text-[14px] font-semibold text-[#0F172A]">Product Name</label>
                 <input 
                   type="text" 
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none"
+                  className="w-full px-4 py-3.5 border border-[#E2E8F0] rounded-xl focus:ring-2 focus:ring-[#0A4DA3] outline-none text-[16px] text-[#0F172A]"
                   placeholder="e.g. Precision Brass Hex Bolt"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700">Category</label>
-                  <select 
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none bg-white"
-                  >
-                    <option>Brass Components</option>
-                    <option>Stainless Steel</option>
-                    <option>Aluminum</option>
-                    <option>Copper Components</option>
-                    <option>Precision Turned Components</option>
-                    <option>CNC Machined Parts</option>
-                  </select>
-                </div>
-                <div className="flex gap-8 items-end pb-3">
-                  <label className="flex items-center gap-2 cursor-pointer group">
-                    <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" />
-                    <span className="text-sm font-bold text-gray-700 group-hover:text-primary transition-colors">Featured</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer group">
-                    <input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" />
-                    <span className="text-sm font-bold text-gray-700 group-hover:text-primary transition-colors">Active</span>
-                  </label>
-                </div>
+              <div className="space-y-2">
+                <label className="text-[14px] font-semibold text-[#0F172A]">Category</label>
+                <select 
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="w-full px-4 py-3.5 border border-[#E2E8F0] rounded-xl focus:ring-2 focus:ring-[#0A4DA3] outline-none bg-white text-[16px] text-[#0F172A] min-h-[50px]"
+                >
+                  <option>Brass Components</option>
+                  <option>Stainless Steel</option>
+                  <option>Aluminum</option>
+                  <option>Copper Components</option>
+                  <option>Precision Turned Components</option>
+                  <option>CNC Machined Parts</option>
+                </select>
+              </div>
+              <div className="flex flex-col gap-4 p-4 md:p-5 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0]">
+                <label className="flex items-center gap-3 cursor-pointer group min-h-[44px]">
+                  <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} className="w-[20px] h-[20px] rounded border-[#E2E8F0] text-[#0A4DA3] focus:ring-[#0A4DA3]" />
+                  <span className="text-[16px] font-medium text-[#0F172A] group-hover:text-[#0A4DA3] transition-colors">Featured Product</span>
+                </label>
+                <label className="flex items-center gap-3 cursor-pointer group min-h-[44px]">
+                  <input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} className="w-[20px] h-[20px] rounded border-[#E2E8F0] text-[#0A4DA3] focus:ring-[#0A4DA3]" />
+                  <span className="text-[16px] font-medium text-[#0F172A] group-hover:text-[#0A4DA3] transition-colors">Status Active</span>
+                </label>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700">Short Description</label>
+                <label className="text-[14px] font-semibold text-[#0F172A]">Short Description</label>
                 <textarea 
-                  rows={2}
+                  rows={3}
                   value={shortDescription}
                   onChange={(e) => setShortDescription(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none resize-none"
+                  className="w-full px-4 py-3.5 border border-[#E2E8F0] rounded-xl focus:ring-2 focus:ring-[#0A4DA3] outline-none resize-none text-[16px] text-[#0F172A]"
                   placeholder="A brief summary for product cards..."
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700">Full Description</label>
+                <label className="text-[14px] font-semibold text-[#0F172A]">Full Description</label>
                 <textarea 
                   rows={6}
                   value={fullDescription}
                   onChange={(e) => setFullDescription(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none"
+                  className="w-full px-4 py-3.5 border border-[#E2E8F0] rounded-xl focus:ring-2 focus:ring-[#0A4DA3] outline-none text-[16px] text-[#0F172A] min-h-[140px]"
                   placeholder="Detailed product information..."
                 />
               </div>
             </div>
-          </section>
+          </details>
 
-          <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-            <h3 className="text-xl font-bold text-gray-800 border-b pb-4">Pricing Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Accordion: Pricing Information */}
+          <details className="bg-white rounded-[20px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-[#E2E8F0] group overflow-hidden">
+            <summary className="p-5 md:p-6 cursor-pointer list-none flex justify-between items-center bg-white hover:bg-[#F8FAFC] transition-colors select-none font-bold text-[#0F172A] text-lg lg:text-xl">
+              Pricing Information
+              <ChevronDown size={24} className="group-open:rotate-180 transition-transform text-[#64748B]" />
+            </summary>
+            <div className="p-5 md:p-6 border-t border-[#E2E8F0] bg-white grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700">Product Price</label>
+                <label className="text-[14px] font-semibold text-[#0F172A]">Product Price</label>
                 <input 
                   type="number" 
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none"
+                  className="w-full px-4 py-3.5 border border-[#E2E8F0] rounded-xl focus:ring-2 focus:ring-[#0A4DA3] outline-none text-[16px] text-[#0F172A]"
                   placeholder="e.g. 1500"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700">Currency Symbol</label>
+                <label className="text-[14px] font-semibold text-[#0F172A]">Currency Symbol</label>
                 <input 
                   type="text" 
                   value={pricePrefix}
                   onChange={(e) => setPricePrefix(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none"
+                  className="w-full px-4 py-3.5 border border-[#E2E8F0] rounded-xl focus:ring-2 focus:ring-[#0A4DA3] outline-none text-[16px] text-[#0F172A]"
                   placeholder="₹"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700">Price Unit</label>
+                <label className="text-[14px] font-semibold text-[#0F172A]">Price Unit</label>
                 <input 
                   type="text" 
                   value={priceUnit}
                   onChange={(e) => setPriceUnit(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none"
+                  className="w-full px-4 py-3.5 border border-[#E2E8F0] rounded-xl focus:ring-2 focus:ring-[#0A4DA3] outline-none text-[16px] text-[#0F172A]"
                   placeholder="e.g. Piece"
                 />
               </div>
-              <div className="flex items-end pb-3">
-                <label className="flex items-center gap-2 cursor-pointer group">
+              <div className="flex items-center min-h-[44px] md:mt-8">
+                <label className="flex items-center gap-3 cursor-pointer group">
                   <input 
                     type="checkbox" 
                     checked={showPrice} 
                     onChange={(e) => setShowPrice(e.target.checked)} 
-                    className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" 
+                    className="w-[20px] h-[20px] rounded border-[#E2E8F0] text-[#0A4DA3] focus:ring-[#0A4DA3]" 
                   />
-                  <span className="text-sm font-bold text-gray-700 group-hover:text-primary transition-colors">Display Price</span>
+                  <span className="text-[16px] font-medium text-[#0F172A] group-hover:text-[#0A4DA3] transition-colors">Display Price to Customers</span>
                 </label>
               </div>
             </div>
-          </section>
+          </details>
 
-          <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-            <div className="flex justify-between items-center border-b pb-4">
-              <h3 className="text-xl font-bold text-gray-800">Specifications</h3>
-              <button onClick={handleAddSpec} className="text-primary hover:text-secondary font-bold text-sm flex items-center gap-1">
-                <Plus size={16} /> Add Field
+          {/* Accordion: Specifications */}
+          <details className="bg-white rounded-[20px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-[#E2E8F0] group overflow-hidden">
+            <summary className="p-5 md:p-6 cursor-pointer list-none flex justify-between items-center bg-white hover:bg-[#F8FAFC] transition-colors select-none font-bold text-[#0F172A] text-lg lg:text-xl">
+              Specifications
+              <ChevronDown size={24} className="group-open:rotate-180 transition-transform text-[#64748B]" />
+            </summary>
+            <div className="p-5 md:p-6 border-t border-[#E2E8F0] bg-white space-y-6">
+              <div className="space-y-4">
+                {specifications.map((spec, idx) => (
+                  <div key={idx} className="flex flex-col sm:flex-row gap-3">
+                    <input 
+                      type="text" 
+                      placeholder="Key (e.g. Material)" 
+                      value={spec.key}
+                      onChange={(e) => handleSpecChange(idx, 'key', e.target.value)}
+                      className="flex-1 px-4 py-3.5 border border-[#E2E8F0] rounded-xl outline-none focus:ring-2 focus:ring-[#0A4DA3] text-[16px]"
+                    />
+                    <div className="flex gap-2">
+                       <input 
+                        type="text" 
+                        placeholder="Value (e.g. Grade 304)" 
+                        value={spec.value}
+                        onChange={(e) => handleSpecChange(idx, 'value', e.target.value)}
+                        className="flex-1 px-4 py-3.5 border border-[#E2E8F0] rounded-xl outline-none focus:ring-2 focus:ring-[#0A4DA3] text-[16px]"
+                      />
+                      <button onClick={() => handleRemoveSpec(idx)} className="text-[#64748B] bg-[#F8FAFC] hover:bg-red-50 hover:text-red-600 rounded-xl w-[52px] h-[52px] flex items-center justify-center shrink-0 border border-[#E2E8F0] transition-colors">
+                        <Trash2 size={20} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button onClick={handleAddSpec} className="text-[#0A4DA3] hover:bg-[#0A4DA3]/5 px-4 py-3 rounded-xl font-bold text-[14px] flex items-center justify-center gap-2 w-full border-2 border-dashed border-[#0A4DA3]/20 transition-colors h-[52px]">
+                <PlusCircle size={20} /> Add Specification Field
               </button>
             </div>
-            <div className="space-y-3">
-              {specifications.map((spec, idx) => (
-                <div key={idx} className="flex gap-4">
-                  <input 
-                    type="text" 
-                    placeholder="Key (e.g. Material)" 
-                    value={spec.key}
-                    onChange={(e) => handleSpecChange(idx, 'key', e.target.value)}
-                    className="flex-1 px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  <input 
-                    type="text" 
-                    placeholder="Value (e.g. Grade 304)" 
-                    value={spec.value}
-                    onChange={(e) => handleSpecChange(idx, 'value', e.target.value)}
-                    className="flex-1 px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  <button onClick={() => handleRemoveSpec(idx)} className="text-gray-300 hover:text-red-500 p-2">
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </section>
+          </details>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-              <div className="flex justify-between items-center border-b pb-4">
-                <h3 className="text-xl font-bold text-gray-800">Key Features</h3>
-                <button onClick={handleAddFeature} className="text-primary hover:text-secondary font-bold text-sm flex items-center gap-1">
-                  <Plus size={16} /> Add
-                </button>
-              </div>
-              <div className="space-y-3">
+          {/* Accordion: Key Features */}
+          <details className="bg-white rounded-[20px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-[#E2E8F0] group overflow-hidden">
+            <summary className="p-5 md:p-6 cursor-pointer list-none flex justify-between items-center bg-white hover:bg-[#F8FAFC] transition-colors select-none font-bold text-[#0F172A] text-lg lg:text-xl">
+              Key Features
+              <ChevronDown size={24} className="group-open:rotate-180 transition-transform text-[#64748B]" />
+            </summary>
+            <div className="p-5 md:p-6 border-t border-[#E2E8F0] bg-white space-y-6">
+              <div className="space-y-4">
                 {features.map((feature, idx) => (
-                  <div key={idx} className="flex gap-2">
+                  <div key={idx} className="flex gap-2 relative">
                     <input 
                       type="text" 
-                      placeholder="Feature..." 
+                      placeholder="e.g. High tolerance durability..." 
                       value={feature}
                       onChange={(e) => handleFeatureChange(idx, e.target.value)}
-                      className="flex-1 px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                      className="flex-1 px-4 py-3.5 border border-[#E2E8F0] rounded-xl outline-none focus:ring-2 focus:ring-[#0A4DA3] text-[16px]"
                     />
-                    <button onClick={() => handleRemoveFeature(idx)} className="text-gray-300 hover:text-red-500">
-                      <Trash2 size={18} />
+                    <button onClick={() => handleRemoveFeature(idx)} className="text-[#64748B] hover:text-red-500 bg-[#F8FAFC] hover:bg-red-50 border border-[#E2E8F0] w-[52px] shrink-0 rounded-xl flex items-center justify-center transition-colors">
+                      <Trash2 size={20} />
                     </button>
                   </div>
                 ))}
               </div>
-            </section>
-            <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-              <div className="flex justify-between items-center border-b pb-4">
-                <h3 className="text-xl font-bold text-gray-800">Applications</h3>
-                <button onClick={handleAddApp} className="text-primary hover:text-secondary font-bold text-sm flex items-center gap-1">
-                  <Plus size={16} /> Add
-                </button>
-              </div>
-              <div className="space-y-3">
+              <button onClick={handleAddFeature} className="text-[#0A4DA3] hover:bg-[#0A4DA3]/5 px-4 py-3 rounded-xl font-bold text-[14px] flex items-center justify-center gap-2 w-full border-2 border-dashed border-[#0A4DA3]/20 transition-colors h-[52px]">
+                <PlusCircle size={20} /> Add Feature Field
+              </button>
+            </div>
+          </details>
+
+          {/* Accordion: Applications */}
+          <details className="bg-white rounded-[20px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-[#E2E8F0] group overflow-hidden">
+            <summary className="p-5 md:p-6 cursor-pointer list-none flex justify-between items-center bg-white hover:bg-[#F8FAFC] transition-colors select-none font-bold text-[#0F172A] text-lg lg:text-xl">
+              Applications
+              <ChevronDown size={24} className="group-open:rotate-180 transition-transform text-[#64748B]" />
+            </summary>
+            <div className="p-5 md:p-6 border-t border-[#E2E8F0] bg-white space-y-6">
+              <div className="space-y-4">
                 {applications.map((app, idx) => (
-                  <div key={idx} className="flex gap-2">
+                  <div key={idx} className="flex gap-2 relative">
                     <input 
                       type="text" 
-                      placeholder="Application..." 
+                      placeholder="e.g. Automotive Industry..." 
                       value={app}
                       onChange={(e) => handleAppChange(idx, e.target.value)}
-                      className="flex-1 px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                      className="flex-1 px-4 py-3.5 border border-[#E2E8F0] rounded-xl outline-none focus:ring-2 focus:ring-[#0A4DA3] text-[16px]"
                     />
-                    <button onClick={() => handleRemoveApp(idx)} className="text-gray-300 hover:text-red-500">
-                      <Trash2 size={18} />
+                    <button onClick={() => handleRemoveApp(idx)} className="text-[#64748B] hover:text-red-500 bg-[#F8FAFC] hover:bg-red-50 border border-[#E2E8F0] w-[52px] shrink-0 rounded-xl flex items-center justify-center transition-colors">
+                      <Trash2 size={20} />
                     </button>
                   </div>
                 ))}
               </div>
-            </section>
-          </div>
+              <button onClick={handleAddApp} className="text-[#0A4DA3] hover:bg-[#0A4DA3]/5 px-4 py-3 rounded-xl font-bold text-[14px] flex items-center justify-center gap-2 w-full border-2 border-dashed border-[#0A4DA3]/20 transition-colors h-[52px]">
+                <PlusCircle size={20} /> Add Application Field
+              </button>
+            </div>
+          </details>
         </div>
 
         {/* Right Column - Media */}
-        <div className="space-y-8">
-          <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-            <h3 className="text-xl font-bold text-gray-800 border-b pb-4">Product Images</h3>
-            <div className="space-y-4">
-              <div className="flex flex-wrap gap-3">
+        <div className="space-y-6">
+          {/* Accordion: Product Images */}
+          <details open className="bg-white rounded-[20px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-[#E2E8F0] group overflow-hidden">
+            <summary className="p-5 md:p-6 cursor-pointer list-none flex justify-between items-center bg-white hover:bg-[#F8FAFC] transition-colors select-none font-bold text-[#0F172A] text-lg lg:text-xl">
+              Product Images
+              <ChevronDown size={24} className="group-open:rotate-180 transition-transform text-[#64748B]" />
+            </summary>
+            <div className="p-5 border-t border-[#E2E8F0] bg-white space-y-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">
                 {images.map((url) => (
-                  <div key={url} className={`relative h-24 w-24 rounded-xl border-2 overflow-hidden group ${primaryImage === url ? 'border-primary' : 'border-transparent'}`}>
+                  <div key={url} className={`relative aspect-square w-full rounded-2xl border-[3px] overflow-hidden group ${primaryImage === url ? 'border-[#0A4DA3]' : 'border-transparent'}`}>
                     <img src={url} alt="Product" className="h-full w-full object-cover" />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                      <button onClick={() => setPrimaryImage(url)} className="p-1 bg-white text-primary rounded-md shadow-lg">
-                        <Check size={14} />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                      <button onClick={() => setPrimaryImage(url)} className="p-2.5 bg-white text-[#0A4DA3] rounded-xl shadow-lg border border-transparent hover:scale-110 transition-transform">
+                        <Check size={18} />
                       </button>
-                      <button onClick={() => handleRemoveImage(url)} className="p-1 bg-white text-red-500 rounded-md shadow-lg">
-                        <Trash2 size={14} />
+                      <button onClick={() => handleRemoveImage(url)} className="p-2.5 bg-white text-red-500 rounded-xl shadow-lg border border-transparent hover:scale-110 transition-transform">
+                        <Trash2 size={18} />
                       </button>
                     </div>
                     {primaryImage === url && (
-                      <div className="absolute top-1 left-1 bg-primary text-white text-[10px] px-1.5 py-0.5 rounded font-bold">
+                      <div className="absolute top-2 left-2 bg-[#0A4DA3] text-white text-[10px] px-2 py-1 rounded-[6px] font-bold shadow-md">
                         Main
                       </div>
                     )}
                   </div>
                 ))}
                 
-                <label className="h-24 w-24 rounded-xl border-2 border-dashed border-gray-200 hover:border-primary transition-all flex flex-col items-center justify-center text-gray-400 hover:text-primary cursor-pointer">
-                  {uploading ? <Loader2 className="animate-spin" size={20} /> : <Upload size={20} />}
-                  <span className="text-[10px] font-bold mt-1">{uploading ? "Uploading..." : "Upload"}</span>
+                <label className="aspect-square w-full rounded-2xl border-[3px] border-dashed border-[#E2E8F0] hover:border-[#0A4DA3] transition-all bg-[#F8FAFC] flex flex-col items-center justify-center text-[#64748B] hover:text-[#0A4DA3] cursor-pointer min-h-[120px] min-w-[120px]">
+                  {uploading ? <Loader2 className="animate-spin" size={28} /> : <Upload size={28} className="mb-2" />}
+                  <span className="text-[12px] font-bold">{uploading ? "Uploading..." : "Upload Images"}</span>
                   <input type="file" multiple accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
                 </label>
               </div>
-              <p className="text-xs text-gray-500">Upload multiple images. Click the checkmark to set as primary image.</p>
+              <p className="text-[13px] font-medium text-[#64748B]">Click the checkmark overlay to set main display image.</p>
             </div>
-          </section>
+          </details>
 
-          <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-            <h3 className="text-xl font-bold text-gray-800 border-b pb-4">SEO Settings</h3>
-            <div className="space-y-4">
+          {/* Accordion: SEO Settings */}
+          <details className="bg-white rounded-[20px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-[#E2E8F0] group overflow-hidden">
+            <summary className="p-5 md:p-6 cursor-pointer list-none flex justify-between items-center bg-white hover:bg-[#F8FAFC] transition-colors select-none font-bold text-[#0F172A] text-lg lg:text-xl">
+              SEO Settings
+              <ChevronDown size={24} className="group-open:rotate-180 transition-transform text-[#64748B]" />
+            </summary>
+            <div className="p-5 border-t border-[#E2E8F0] bg-white space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700">Meta Title</label>
+                <label className="text-[14px] font-semibold text-[#0F172A]">Meta Title</label>
                 <input 
                   type="text" 
                   value={metaTitle}
                   onChange={(e) => setMetaTitle(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3.5 border border-[#E2E8F0] rounded-xl outline-none focus:ring-2 focus:ring-[#0A4DA3] text-[16px]"
                   placeholder="SEO title..."
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700">Meta Description</label>
+                <label className="text-[14px] font-semibold text-[#0F172A]">Meta Description</label>
                 <textarea 
                   rows={3}
                   value={metaDescription}
                   onChange={(e) => setMetaDescription(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary resize-none"
+                  className="w-full px-4 py-3.5 border border-[#E2E8F0] rounded-xl outline-none focus:ring-2 focus:ring-[#0A4DA3] resize-none text-[16px]"
                   placeholder="SEO description..."
                 />
               </div>
             </div>
-          </section>
+          </details>
         </div>
       </div>
+
     </div>
   );
 }

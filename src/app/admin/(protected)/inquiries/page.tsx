@@ -153,179 +153,210 @@ export default function InquiriesPage() {
               <p className="text-gray-500">Try adjusting your search.</p>
             </div>
           ) : (
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Customer</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Product</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Date</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
+            <>
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Customer</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Product</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Date</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {filteredInquiries.map((inquiry) => (
+                      <tr key={inquiry.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex flex-col">
+                            <span className="font-bold text-gray-800">{inquiry.customer_name}</span>
+                            <span className="text-sm text-gray-500">{inquiry.email}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-600">
+                          {inquiry.product_name || "General Inquiry"}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">
+                          {format(new Date(inquiry.created_at), "MMM d, yyyy")}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                            inquiry.status === 'New' ? 'bg-blue-100 text-blue-700' : 
+                            inquiry.status === 'Contacted' ? 'bg-yellow-100 text-yellow-700' : 
+                            'bg-green-100 text-green-700'
+                          }`}>
+                            {inquiry.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <div className="flex justify-end gap-2">
+                            <button 
+                              onClick={() => setSelectedInquiry(inquiry)}
+                              className="p-2 text-gray-400 hover:text-primary transition-colors"
+                            >
+                              <Eye size={18} />
+                            </button>
+                            <button 
+                              onClick={() => handleDelete(inquiry.id)}
+                              className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile stacked layout */}
+              <div className="md:hidden flex flex-col gap-3 p-4 bg-[#F8FAFC]">
                 {filteredInquiries.map((inquiry) => (
-                  <tr key={inquiry.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex flex-col">
-                        <span className="font-bold text-gray-800">{inquiry.customer_name}</span>
-                        <span className="text-sm text-gray-500">{inquiry.email}</span>
+                  <div key={inquiry.id} className="bg-white rounded-2xl p-4 shadow-sm border border-[#E2E8F0] flex flex-col gap-3 relative">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="font-bold text-[#0F172A] text-sm">{inquiry.customer_name}</h3>
+                        <p className="text-[11px] text-[#64748B] mb-1">{inquiry.email}</p>
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">
-                      {inquiry.product_name || "General Inquiry"}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">
-                      {format(new Date(inquiry.created_at), "MMM d, yyyy")}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                         inquiry.status === 'New' ? 'bg-blue-100 text-blue-700' : 
                         inquiry.status === 'Contacted' ? 'bg-yellow-100 text-yellow-700' : 
                         'bg-green-100 text-green-700'
                       }`}>
                         {inquiry.status}
                       </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end gap-2">
-                        <button 
-                          onClick={() => setSelectedInquiry(inquiry)}
-                          className="p-2 text-gray-400 hover:text-primary transition-colors"
-                        >
-                          <Eye size={18} />
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(inquiry.id)}
-                          className="p-2 text-gray-400 hover:text-red-500 transition-colors"
-                        >
-                          <Trash2 size={18} />
-                        </button>
+                    </div>
+                    
+                    <div className="bg-gray-50 p-2.5 rounded-xl border border-gray-100 flex flex-col gap-1.5">
+                      <div className="flex items-center gap-2">
+                        <Package size={14} className="text-[#64748B]" />
+                        <span className="text-xs font-semibold text-[#0F172A] truncate">{inquiry.product_name || "General Inquiry"}</span>
                       </div>
-                    </td>
-                  </tr>
+                      <div className="flex items-center gap-2">
+                        <Calendar size={14} className="text-[#64748B]" />
+                        <span className="text-xs text-[#64748B]">{format(new Date(inquiry.created_at), "MMM d, yyyy")}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-2 justify-end border-t border-[#E2E8F0] pt-3 mt-1">
+                      <button onClick={() => setSelectedInquiry(inquiry)} className="flex-1 flex justify-center items-center gap-1.5 p-2 bg-gray-50 hover:bg-gray-100 text-[#0F172A] rounded-xl text-xs font-bold transition-colors">
+                        <Eye size={14} /> View Details
+                      </button>
+                      <button onClick={() => handleDelete(inquiry.id)} className="flex items-center justify-center p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors shrink-0">
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </>
           )}
         </div>
       </div>
 
       {/* Inquiry Detail Modal */}
       {selectedInquiry && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-              <h3 className="text-xl font-bold text-gray-800">Inquiry Details</h3>
-              <button onClick={() => setSelectedInquiry(null)} className="text-gray-400 hover:text-gray-600">
-                <X size={24} />
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-auto">
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-[#0F172A]/70 backdrop-blur-sm" onClick={() => setSelectedInquiry(null)} />
+          
+          <div className="bg-white shadow-2xl w-full max-w-[400px] max-h-[85dvh] rounded-[20px] flex flex-col relative animate-in fade-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="p-4 border-b border-[#E2E8F0] flex justify-between items-center shrink-0">
+              <h3 className="text-[16px] font-bold text-[#0F172A]">Inquiry Details</h3>
+              <button onClick={() => setSelectedInquiry(null)} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-[#64748B] hover:bg-gray-200 hover:text-[#0F172A] transition-colors shrink-0">
+                <X size={16} />
               </button>
             </div>
-            <div className="p-8 space-y-8 max-h-[80vh] overflow-y-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-lg text-primary">
-                      <User size={20} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Customer Name</p>
-                      <p className="font-bold text-gray-800">{selectedInquiry.customer_name}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-lg text-primary">
-                      <Building2 size={20} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Company</p>
-                      <p className="font-bold text-gray-800">{selectedInquiry.company_name || "N/A"}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-lg text-primary">
-                      <Mail size={20} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Email Address</p>
-                      <a href={`mailto:${selectedInquiry.email}`} className="font-bold text-primary hover:underline">{selectedInquiry.email}</a>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-lg text-primary">
-                      <Phone size={20} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Phone Number</p>
-                      <a href={`tel:${selectedInquiry.phone}`} className="font-bold text-gray-800 hover:text-primary transition-colors">{selectedInquiry.phone || "N/A"}</a>
-                    </div>
-                  </div>
+            
+            {/* Scrollable Content */}
+            <div className="bg-white flex-1 overflow-y-auto p-4 space-y-3">
+              
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 shrink-0 bg-[#F0F5FA] rounded-[8px] text-[#0A4DA3] flex items-center justify-center border border-[#EBF4FF]">
+                  <User size={14} />
                 </div>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-lg text-primary">
-                      <Package size={20} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Product Requested</p>
-                      <p className="font-bold text-gray-800">{selectedInquiry.product_name || "General Inquiry"}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-lg text-primary">
-                      <Plus size={20} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Quantity</p>
-                      <p className="font-bold text-gray-800">{selectedInquiry.quantity || "N/A"}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-lg text-primary">
-                      <Calendar size={20} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Date Received</p>
-                      <p className="font-bold text-gray-800">{format(new Date(selectedInquiry.created_at), "MMMM d, yyyy HH:mm")}</p>
-                    </div>
-                  </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider mb-0.5">Company / Customer</p>
+                  <p className="text-[13px] font-semibold text-[#1E293B] break-words leading-tight">{selectedInquiry.customer_name} {selectedInquiry.company_name ? `(${selectedInquiry.company_name})` : ''}</p>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Message</p>
-                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 text-gray-700 leading-relaxed">
-                  {selectedInquiry.message || "No message provided."}
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 shrink-0 bg-[#F0F5FA] rounded-[8px] text-[#0A4DA3] flex items-center justify-center border border-[#EBF4FF]">
+                  <Mail size={14} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider mb-0.5">Email</p>
+                  <a href={`mailto:${selectedInquiry.email}`} className="text-[13px] font-medium text-[#0A4DA3] break-words leading-tight hover:underline">{selectedInquiry.email}</a>
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-gray-100 flex flex-col md:flex-row gap-4 items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-bold text-gray-500">Update Status:</span>
-                  <div className="flex gap-2">
-                    {['New', 'Contacted', 'Closed'].map((status) => (
-                      <button
-                        key={status}
-                        onClick={() => updateStatus(selectedInquiry.id, status)}
-                        className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                          selectedInquiry.status === status 
-                            ? 'bg-primary text-white' 
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                        }`}
-                      >
-                        {status}
-                      </button>
-                    ))}
-                  </div>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 shrink-0 bg-[#F0F5FA] rounded-[8px] text-[#0A4DA3] flex items-center justify-center border border-[#EBF4FF]">
+                  <Phone size={14} />
                 </div>
-                <button 
-                  onClick={() => handleDelete(selectedInquiry.id)}
-                  className="flex items-center gap-2 text-red-500 hover:text-red-700 font-bold text-sm"
-                >
-                  <Trash2 size={18} /> Delete Inquiry
-                </button>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider mb-0.5">Phone</p>
+                  <a href={`tel:${selectedInquiry.phone}`} className="text-[13px] font-medium text-[#0A4DA3] break-words leading-tight hover:underline">{selectedInquiry.phone || "N/A"}</a>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 shrink-0 bg-[#FFFBEB] rounded-[8px] text-[#D4AF37] flex items-center justify-center border border-[#FEF3C7]">
+                  <Package size={14} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider mb-0.5">Product</p>
+                  <p className="text-[13px] font-semibold text-[#1E293B] break-words leading-tight">{selectedInquiry.product_name || "General Inquiry"}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 shrink-0 bg-[#F0F5FA] rounded-[8px] text-[#0A4DA3] flex items-center justify-center border border-[#EBF4FF]">
+                  <Calendar size={14} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider mb-0.5">Date Received</p>
+                  <p className="text-[13px] font-medium text-[#1E293B] break-words leading-tight">{format(new Date(selectedInquiry.created_at), "MMMM d, yyyy HH:mm")}</p>
+                </div>
+              </div>
+
+              {/* Message Block */}
+              <div className="pt-1">
+                <div className="bg-[#F8FAFC] border border-[#E2E8F0] p-3 rounded-[10px]">
+                  <p className="text-[#334155] italic text-[12px] leading-relaxed">"{selectedInquiry.message || "No message provided."}"</p>
+                </div>
               </div>
             </div>
+
+            {/* Sticky Action Footer inside Modal */}
+            <div className="p-3 border-t border-[#E2E8F0] bg-gray-50/50 shrink-0 rounded-b-[20px] flex flex-col gap-2">
+              <div className="grid grid-cols-3 gap-1.5">
+                {['New', 'Contacted', 'Closed'].map((status) => (
+                  <button
+                    key={status}
+                    onClick={() => updateStatus(selectedInquiry.id, status)}
+                    className={`h-[36px] rounded-[8px] font-semibold text-[12px] tracking-tight transition-all ${
+                      selectedInquiry.status === status 
+                        ? 'bg-[#0A4DA3] text-white shadow-sm' 
+                        : 'bg-white text-[#64748B] border border-[#E2E8F0] hover:bg-gray-50'
+                    }`}
+                  >
+                    {status}
+                  </button>
+                ))}
+              </div>
+              <button 
+                onClick={() => handleDelete(selectedInquiry.id)}
+                className="h-[36px] w-full rounded-[8px] bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-[13px] transition-colors flex items-center justify-center gap-1.5"
+              >
+                <Trash2 size={14} /> Delete
+              </button>
+            </div>
+            
           </div>
         </div>
       )}

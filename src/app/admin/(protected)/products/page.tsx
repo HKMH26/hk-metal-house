@@ -162,67 +162,118 @@ export default function ProductsListPage() {
               <p className="text-gray-500">Try adjusting your search or filters.</p>
             </div>
           ) : (
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Product</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Category</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Featured</th>
-                  <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {filteredProducts.map((product) => (
-                  <tr key={product.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 bg-gray-100 rounded-lg overflow-hidden shrink-0 border border-gray-100">
-                          {product.primary_image ? (
-                            <img src={product.primary_image} alt={product.name} className="h-full w-full object-cover" />
-                          ) : (
-                            <div className="h-full w-full flex items-center justify-center text-gray-300">
-                              <Package size={20} />
+            <>
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Product</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Category</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Featured</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {filteredProducts.map((product) => (
+                      <tr key={product.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-4">
+                            <div className="h-12 w-12 bg-gray-100 rounded-lg overflow-hidden shrink-0 border border-gray-100">
+                              {product.primary_image ? (
+                                <img src={product.primary_image} alt={product.name} className="h-full w-full object-cover" />
+                              ) : (
+                                <div className="h-full w-full flex items-center justify-center text-gray-300">
+                                  <Package size={20} />
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
-                        <div className="font-bold text-gray-800">{product.name}</div>
+                            <div className="font-bold text-gray-800">{product.name}</div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-600">{product.category}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${product.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                            {product.active ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <button onClick={() => toggleFeatured(product.id, product.featured)}>
+                            <Star 
+                              size={20} 
+                              className={product.featured ? "text-yellow-500 fill-yellow-500" : "text-gray-200 hover:text-yellow-500 transition-colors"} 
+                            />
+                          </button>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <div className="flex justify-end gap-2">
+                            <Link href={`/products/${product.slug}`} target="_blank" className="p-2 text-gray-400 hover:text-primary transition-colors" title="View on site">
+                              <Eye size={18} />
+                            </Link>
+                            <button onClick={() => handleDuplicate(product)} className="p-2 text-gray-400 hover:text-blue-500 transition-colors" title="Duplicate">
+                              <Copy size={18} />
+                            </button>
+                            <Link href={`/admin/products/${product.id}/edit`} className="p-2 text-gray-400 hover:text-blue-500 transition-colors" title="Edit">
+                              <Edit size={18} />
+                            </Link>
+                            <button onClick={() => handleDelete(product.id)} className="p-2 text-gray-400 hover:text-red-500 transition-colors" title="Delete">
+                              <Trash2 size={18} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile stacked layout */}
+              <div className="md:hidden flex flex-col gap-3 p-4 bg-[#F8FAFC]">
+                {filteredProducts.map((product) => (
+                  <div key={product.id} className="bg-white rounded-2xl p-4 shadow-sm border border-[#E2E8F0] flex flex-col gap-3">
+                    <div className="flex gap-4">
+                      <div className="h-16 w-16 bg-gray-100 rounded-xl overflow-hidden shrink-0 border border-gray-100 relative">
+                        {product.primary_image ? (
+                          <img src={product.primary_image} alt={product.name} className="h-full w-full object-cover" />
+                        ) : (
+                          <div className="h-full w-full flex items-center justify-center text-gray-400">
+                            <Package size={24} />
+                          </div>
+                        )}
+                        <button 
+                          onClick={() => toggleFeatured(product.id, product.featured)} 
+                          className="absolute -top-1 -right-1 bg-white/90 backdrop-blur rounded-full p-1 shadow-sm"
+                        >
+                          <Star size={12} className={product.featured ? "text-[#D4AF37] fill-[#D4AF37]" : "text-gray-300"} />
+                        </button>
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">{product.category}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${product.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                        {product.active ? 'Active' : 'Inactive'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button onClick={() => toggleFeatured(product.id, product.featured)}>
-                        <Star 
-                          size={20} 
-                          className={product.featured ? "text-yellow-500 fill-yellow-500" : "text-gray-200 hover:text-yellow-500 transition-colors"} 
-                        />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-[#0F172A] text-sm truncate">{product.name}</h3>
+                        <p className="text-[11px] text-[#64748B] mb-1.5 uppercase font-medium tracking-wide">{product.category}</p>
+                        <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${product.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                          {product.active ? 'Active' : 'Inactive'}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-2 justify-end border-t border-[#E2E8F0] pt-3 mt-1">
+                      <Link href={`/products/${product.slug}`} target="_blank" className="flex-1 flex justify-center items-center gap-1.5 p-2 bg-gray-50 hover:bg-gray-100 text-[#0F172A] rounded-xl text-xs font-bold transition-colors">
+                        <Eye size={14} /> View
+                      </Link>
+                      <button onClick={() => handleDuplicate(product)} className="flex-1 flex justify-center items-center gap-1.5 p-2 bg-gray-50 hover:bg-gray-100 text-[#0F172A] rounded-xl text-xs font-bold transition-colors">
+                        <Copy size={14} /> Copy
                       </button>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end gap-2">
-                        <Link href={`/products/${product.slug}`} target="_blank" className="p-2 text-gray-400 hover:text-primary transition-colors" title="View on site">
-                          <Eye size={18} />
-                        </Link>
-                        <button onClick={() => handleDuplicate(product)} className="p-2 text-gray-400 hover:text-blue-500 transition-colors" title="Duplicate">
-                          <Copy size={18} />
-                        </button>
-                        <Link href={`/admin/products/${product.id}/edit`} className="p-2 text-gray-400 hover:text-blue-500 transition-colors" title="Edit">
-                          <Edit size={18} />
-                        </Link>
-                        <button onClick={() => handleDelete(product.id)} className="p-2 text-gray-400 hover:text-red-500 transition-colors" title="Delete">
-                          <Trash2 size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                      <Link href={`/admin/products/${product.id}/edit`} className="flex-1 flex justify-center items-center gap-1.5 p-2 bg-blue-50 hover:bg-blue-100 text-[#0A4DA3] rounded-xl text-xs font-bold transition-colors">
+                        <Edit size={14} /> Edit
+                      </Link>
+                      <button onClick={() => handleDelete(product.id)} className="flex-1 flex justify-center items-center gap-1.5 p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-bold transition-colors">
+                        <Trash2 size={14} /> Delete
+                      </button>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </>
           )}
         </div>
         

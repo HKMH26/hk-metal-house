@@ -118,23 +118,23 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="max-w-4xl mx-auto px-0 sm:px-4 py-4 sm:py-8 space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 px-2 sm:px-0">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Settings</h1>
-          <p className="text-gray-500 mt-2">Manage your business information and site settings.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Settings</h1>
+          <p className="text-sm sm:text-base text-gray-500 mt-1 sm:mt-2">Manage your business information and site settings.</p>
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-3 sm:gap-4 mt-2 sm:mt-0">
           <Link 
             href="/admin/change-password"
-            className="bg-white text-gray-700 px-6 py-3 rounded-lg font-bold border border-gray-200 hover:bg-gray-50 transition-all flex items-center gap-2 shadow-sm"
+            className="bg-white text-gray-700 px-6 py-3 rounded-xl font-bold border border-gray-200 hover:bg-gray-50 transition-all flex items-center justify-center gap-2 shadow-sm order-2 sm:order-1"
           >
             <KeyRound size={20} /> Change Password
           </Link>
           <button 
             onClick={handleSave}
             disabled={saving}
-            className="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-secondary transition-all flex items-center gap-2 shadow-lg shadow-primary/20 disabled:opacity-70"
+            className="bg-[#0B3D91] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#0A3A7A] transition-all flex items-center justify-center gap-2 shadow-[0_8px_20px_rgba(11,61,145,0.2)] disabled:opacity-70 order-1 sm:order-2 w-full sm:w-auto"
           >
             {saving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
             Save Changes
@@ -142,9 +142,9 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-8">
+      <form onSubmit={handleSave} className="space-y-6 sm:space-y-8">
         {/* Basic Info */}
-        <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+        <section className="bg-white p-6 sm:p-8 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-50 space-y-6">
           <div className="flex items-center gap-3 border-b pb-4">
             <Building2 className="text-primary" size={24} />
             <h2 className="text-xl font-bold text-gray-800">Company Information</h2>
@@ -239,7 +239,7 @@ export default function SettingsPage() {
         </section>
 
         {/* Location & Maps */}
-        <section className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+        <section className="bg-white p-6 sm:p-8 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-50 space-y-6">
           <div className="flex items-center gap-3 border-b pb-4">
             <Map className="text-primary" size={24} />
             <h2 className="text-xl font-bold text-gray-800">Map & Location</h2>
@@ -271,7 +271,7 @@ export default function SettingsPage() {
         </section>
 
         {/* Social Media */}
-        <section className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+        <section className="bg-white p-6 sm:p-8 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-50 space-y-6 mb-[env(safe-area-inset-bottom)] pb-8">
           <div className="flex items-center gap-3 border-b pb-4">
             <Globe className="text-primary" size={24} />
             <h2 className="text-xl font-bold text-gray-800">Social Media Links</h2>

@@ -42,33 +42,31 @@ export default function Sidebar() {
     router.refresh();
   };
 
+  const getPageTitle = () => {
+    if (pathname.includes('/products/new')) return 'Add Product';
+    if (pathname.includes('/products/') && pathname !== '/admin/products') return 'Edit Product';
+    if (pathname.includes('/change-password')) return 'Change Password';
+    const match = navItems.find(item => pathname.startsWith(item.href));
+    return match ? match.name : 'Dashboard';
+  };
+
   return (
     <>
       {/* Mobile Toggle & Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 h-16 flex items-center justify-between shadow-sm">
-        <div className="flex items-center gap-3">
-          <button 
-            onClick={() => setIsOpen(!isOpen)}
-            className="p-2 text-[#0A3A7A] hover:bg-gray-100 rounded-xl transition-colors"
-          >
-            <Menu size={24} />
-          </button>
-          <div className="flex items-center gap-2">
-            <Image 
-              src="/images/hk-metal-house-logo.png" 
-              alt="Logo" 
-              width={32} 
-              height={32} 
-              className="object-contain"
-            />
-            <span className="font-bold text-[#0A3A7A] text-sm">HK Metal House Admin</span>
-          </div>
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-[100] bg-white border-b border-[#E2E8F0] px-4 h-[72px] flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+        <button 
+          onClick={() => setIsOpen(!isOpen)}
+          className="p-2 -ml-2 text-[#0A3A7A] hover:bg-gray-100 rounded-xl transition-colors"
+        >
+          <Menu size={24} />
+        </button>
+        
+        <div className="absolute left-1/2 -translate-x-1/2 font-bold text-[#0F172A] text-[18px] tracking-tight whitespace-nowrap">
+          {getPageTitle()}
         </div>
-        <div className="flex items-center gap-2">
-          <button className="p-2 text-gray-400 hover:text-primary transition-colors">
-            <Star size={20} />
-          </button>
-        </div>
+        
+        {/* Placeholder to balance flex space */}
+        <div className="w-10"></div>
       </div>
 
       {/* Sidebar Overlay */}
@@ -77,14 +75,14 @@ export default function Sidebar() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] lg:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999] lg:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       <aside className={cn(
-        "w-80 bg-gradient-to-b from-[#0B3D91] via-[#0A3A7A] to-[#082D5F] text-white flex flex-col min-h-screen fixed left-0 top-0 z-[70] border-r border-white/5 transition-all duration-500 ease-in-out lg:translate-x-0 shadow-2xl",
-        isOpen ? "translate-x-0" : "-translate-x-full"
+        "w-[85vw] max-w-[340px] lg:max-w-none lg:w-80 bg-gradient-to-b from-[#0B3D91] via-[#0A3A7A] to-[#082D5F] text-white flex flex-col h-[100dvh] fixed left-0 top-0 z-[1000] border-r border-white/5 transition-all duration-500 ease-in-out shadow-2xl overflow-hidden",
+        isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}>
         <div className="flex items-center justify-between px-6 py-8 border-b border-white/10"> 
           <div className="flex items-center gap-4">
